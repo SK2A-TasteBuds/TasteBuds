@@ -2,7 +2,7 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
+
 const SignIn = () => {
   //states
   const [email, setEmail] = useState("");
