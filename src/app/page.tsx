@@ -10,6 +10,10 @@ export default function Home() {
     },
   });
 
+  if (!session.data?.user) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <h1 className="text-5xl bg-orangePrimary text-white">Home Page</h1>
@@ -19,3 +23,5 @@ export default function Home() {
     </main>
   );
 }
+
+Home.requireAuth = true;
