@@ -1,5 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
+import type {SignInResponse} from 'next-auth/react'
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {GoogleLoginBtn} from "@/app/components/GoogleLoginBtn";
@@ -10,6 +11,20 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const handleSignIn = async () => {
+    const result: SignInResponse | undefined = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    })
+    console.log(result);
+    if (result && 'status' in result && result.status === 200 && result.ok) {
+      router.push("/");
+    } else {
+      console.log("error : ",result?.error);
+    }
+  };
 
   return (
     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm ">
@@ -67,16 +82,9 @@ export const LoginForm = () => {
 
       <div>
         <button
-          onClick={() =>
-            signIn("credentials", {
-              email,
-              password,
-              redirect: true,
-              callbackUrl: "/",
-            })
-          }
+          onClick={() => handleSignIn()}
           disabled={!email || !password}
-          className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 bg-orangeSecondary"
+          className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 "
         >
           Login
         </button>
