@@ -12,6 +12,7 @@ export default async function Page() {
 
   return (
     <>
+      <h1>Main Page</h1>
       <pre>{JSON.stringify(session, null, 2)}</pre>
       <SignOutBtn />
     </>
