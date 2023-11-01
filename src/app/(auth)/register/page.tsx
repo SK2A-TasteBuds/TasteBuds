@@ -25,6 +25,8 @@ const Register = () => {
       <div className=" mt-4 flex gap-2">
         {!isFirstStep &&  <button  type="button" className="bg-blue-300" onClick={back}>back</button>}
         <button type="button" className="bg-red-400" onClick={next}>next</button>
+        {isLastStep && <button type="button" className="bg-green-400" onClick={next}>submit</button>}
+
       </div>
     </form>
   </div>
