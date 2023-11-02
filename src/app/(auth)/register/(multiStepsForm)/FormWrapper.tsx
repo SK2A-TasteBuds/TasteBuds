@@ -1,7 +1,12 @@
 import { type } from "os";
 import { ReactElement, ReactHTMLElement } from "react";
 
-const FormWrapper = ({ children }: { children: React.ReactNode }) => {
+type FormWrapperProps = {
+  title: String;
+  children: React.ReactNode;
+};
+
+const FormWrapper = ({ children, title }: FormWrapperProps) => {
   return (
     <>
       <h2 className="text-center m-0 mb-7">Header</h2>
