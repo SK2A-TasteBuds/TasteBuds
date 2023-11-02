@@ -6,12 +6,11 @@ import { redirect } from "next/navigation";
 export default async function Page() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/signIn");
-  }
-
+  if (!session) redirect("/login");
+  
   return (
     <>
+      <h1>Main Page</h1>
       <pre>{JSON.stringify(session, null, 2)}</pre>
       <SignOutBtn />
     </>

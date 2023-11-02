@@ -1,12 +1,14 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Profile } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase/configs";
+import { auth, db } from "@/firebase/configs";
+import { doc, setDoc ,collection } from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   pages: {
-    signIn: "/signIn",
+    signIn: "/login",
   },
   providers: [
     CredentialsProvider({
@@ -33,7 +35,35 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     //add More provider
+    GoogleProvider({
+      // string型にキャスト typeScript Errorのため
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
   ],
+  /*
+    callbacks とは関数を返す関数または　関数の引数に別の関数を指定する
+  */
+  callbacks: {
+    async signIn({ account, profile }) {
+      /*
+        認証に Oauth を使用している場合は db にユーザーが存在するかどうかを確認
+        存在しない場合は存在しない場合はユーザー データを保存
+      */
+      if (account?.provider === "google") {
+        // db process
+       
+        //console.log("profileId?",profile);
+        const uid = profile?.sub; //google id
+        const usersRef = collection(db, "users");
+        await setDoc(doc(usersRef, uid), {
+          name: profile?.name, email: profile?.email , image : profile?.picture
+        });
+      }
+      
+      return true;
+    },
+  },
 };
 export const handler = NextAuth(authOptions);
 
