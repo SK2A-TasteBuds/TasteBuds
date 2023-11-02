@@ -7,22 +7,28 @@ import { useRouter } from "next/navigation";
 import { signUp } from "@/firebase/register";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
   const handleSignUp = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      console.log("password Do not Match");
+      setError("Validation Error : password Do not Match");
       return;
     }
-    const result = signUp(email, password);
-    console.log("email : ", email);
-    console.log("password : ", password);
-    console.log("confirm : ", confirmPassword);
+
+    const result = signUp(email, password)
+      .then()
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+      });
+    //revalidate
     console.log(result);
   };
   return (
@@ -105,6 +111,7 @@ const Register = () => {
                 >
                   Create an account
                 </button>
+                <p className="text-xs text-red-500">{error}</p>
                 <p className="text-sm font-light text-gray-500 ">
                   Already have an account?{" "}
                   <Link
