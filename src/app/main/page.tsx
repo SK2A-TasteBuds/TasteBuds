@@ -1,7 +1,6 @@
 // import "./main.css"
 // 画像は仮です
 //name気に入らなかったら変えてもらって構いません
-//tailwind.confにgray追加(#D9D9D9)main画面の画像の影色追加pink1(fc9276)pink2(fac3b4)
 export default function Main() {
     return (
         <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
