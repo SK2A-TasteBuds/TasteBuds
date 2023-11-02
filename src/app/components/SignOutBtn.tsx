@@ -6,7 +6,7 @@ const SignOutBtn = () => {
   const session = useSession({
     required: true,
     onUnauthenticated() {
-      redirect("/signIn");
+      redirect("/login");
     },
   });
   return <button onClick={() => signOut()}>Sign Out</button>;

@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === "google") {
         // db process
 
-        //console.log("profileId?",profile);
+        console.log("profileId?",profile);
         const uid = profile?.sub; //google id
         const usersRef = collection(db, "users");
         await setDoc(doc(usersRef, uid), {
@@ -65,6 +65,11 @@ export const authOptions: NextAuthOptions = {
 
       return true;
     },
+    async session({ session, user, token }) {
+      console.log("token.sub :",token.sub)
+      session.user.id = token.sub;
+      return session
+    }
   },
 };
 export const handler = NextAuth(authOptions);
