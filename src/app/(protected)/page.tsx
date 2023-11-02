@@ -7,7 +7,7 @@ export default async function Page() {
   const session = await getServerSession(authOptions);
 
   if (!session) redirect("/login");
-  
+
   return (
     <>
       <h1>Main Page</h1>

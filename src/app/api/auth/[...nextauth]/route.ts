@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import { doc, setDoc ,collection } from "firebase/firestore";
+import { doc, setDoc, collection } from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -52,15 +52,17 @@ export const authOptions: NextAuthOptions = {
       */
       if (account?.provider === "google") {
         // db process
-       
+
         //console.log("profileId?",profile);
         const uid = profile?.sub; //google id
         const usersRef = collection(db, "users");
         await setDoc(doc(usersRef, uid), {
-          name: profile?.name, email: profile?.email , image : profile?.picture
+          name: profile?.name,
+          email: profile?.email,
+          image: profile?.picture,
         });
       }
-      
+
       return true;
     },
   },
