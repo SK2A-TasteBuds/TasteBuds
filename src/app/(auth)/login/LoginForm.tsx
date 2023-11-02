@@ -25,7 +25,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow px-6 pb-8 mx-auto ">
+    <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow px-6 py-8 mx-auto ">
       <div className="space-y-6">
         <div>
           <label

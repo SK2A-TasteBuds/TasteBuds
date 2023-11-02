@@ -28,8 +28,8 @@ const Register = () => {
         const errorMessage = error.message;
         setError(errorMessage);
       });
-    //revalidate
-    console.log(result);
+    //redirect
+    
   };
   return (
     <>
