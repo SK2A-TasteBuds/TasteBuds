@@ -33,7 +33,7 @@ const Register = () => {
           return null;
         });
         //redirect
-        router.push("/");
+        router.push("/getting-started");
       })
       .catch((error) => {
         const errorMessage = error.message;

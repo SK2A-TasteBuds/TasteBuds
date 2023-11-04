@@ -1,9 +1,10 @@
 import NextAuth, { NextAuthOptions, Profile } from "next-auth";
+import { redirect } from "next/navigation";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import { doc, setDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, collection, serverTimestamp, getDoc } from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -42,29 +43,36 @@ export const authOptions: NextAuthOptions = {
     callbacks とは関数を返す関数または　関数の引数に別の関数を指定する
   */
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account, profile, user }) {
       /*
         認証に Oauth を使用している場合は db にユーザーが存在するかどうかを確認
         存在しない場合は存在しない場合はユーザー データを保存
       */
+      console.log(user);
       if (account?.provider === "google") {
         // db process
-
-        console.log("profileId?", profile);
+        //console.log("profileId?", profile);
         const uid = profile?.sub; //google id
-        const usersRef = collection(db, "users");
-        await setDoc(doc(usersRef, uid), {
-          name: profile?.name,
-          email: profile?.email,
-          image: profile?.picture,
-          created_at: serverTimestamp(),
-        });
+        const userDocRef = doc(db, "users", `${uid}`); // uid はnumber型 `${}`に入れて　string型にキャスト
+        const docSnap = await getDoc(userDocRef);
+
+        if (!docSnap.exists()) {
+          const usersColRef = collection(db, "users");
+          await setDoc(doc(usersColRef, uid), {
+            name: profile?.name,
+            email: profile?.email,
+            image: profile?.picture,
+            created_at: serverTimestamp(),
+          });
+        } else {
+          //console.log("Document data:", docSnap.data());
+        }
       }
 
       return true;
     },
     async session({ session, user, token }) {
-      console.log("token.sub :", token.sub);
+      // console.log("token.sub :", token.sub);
       session.user.id = token.sub;
       return session;
     },

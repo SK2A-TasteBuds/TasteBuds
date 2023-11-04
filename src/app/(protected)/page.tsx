@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import SignOutBtn from "../components/SignOutBtn";
 export default function Main() {
   const { data: session, status } = useSession();
-  console.log(session);
+
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>
