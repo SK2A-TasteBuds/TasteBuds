@@ -16,11 +16,11 @@ export const LoginForm = () => {
       password,
       redirect: false,
     });
-    console.log(result);
+   
     if (result && "status" in result && result.status === 200 && result.ok) {
       router.push("/");
     } else {
-      console.log("error : ", result?.error);
+      console.log("error : ", result);
     }
   };
 

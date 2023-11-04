@@ -3,13 +3,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, collection, serverTimestamp } from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
-  pages: {
-    signIn: "/login",
-  },
+  pages: {},
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -30,7 +28,6 @@ export const authOptions: NextAuthOptions = {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(error);
           });
       },
     }),
@@ -53,23 +50,24 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === "google") {
         // db process
 
-        console.log("profileId?",profile);
+        console.log("profileId?", profile);
         const uid = profile?.sub; //google id
         const usersRef = collection(db, "users");
         await setDoc(doc(usersRef, uid), {
           name: profile?.name,
           email: profile?.email,
           image: profile?.picture,
+          created_at: serverTimestamp(),
         });
       }
 
       return true;
     },
     async session({ session, user, token }) {
-      console.log("token.sub :",token.sub)
+      console.log("token.sub :", token.sub);
       session.user.id = token.sub;
-      return session
-    }
+      return session;
+    },
   },
 };
 export const handler = NextAuth(authOptions);
