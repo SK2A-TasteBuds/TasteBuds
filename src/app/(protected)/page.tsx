@@ -6,10 +6,10 @@ import { redirect } from "next/navigation";
 import SignOutBtn from "../components/SignOutBtn";
 export default async function Main() {
   const session = await getServerSession(authOptions);
-  //console.log("session called form mainPage", session);
-  if (!session?.user.isNewUser) {
+
+  if (session?.user.isNewUser) {
     console.log(session?.user.isNewUser);
-    //redirect("/getting-started");
+    redirect("/getting-started");
   }
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
