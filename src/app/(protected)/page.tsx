@@ -1,11 +1,16 @@
 // 画像は仮です
 //name気に入らなかったら変えてもらって構いません
-"use client";
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 import SignOutBtn from "../components/SignOutBtn";
-export default function Main() {
-  const { data: session, status } = useSession();
-
+export default async function Main() {
+  const session = await getServerSession(authOptions);
+  //console.log("session called form mainPage", session);
+  if (!session?.user.isNewUser) {
+    console.log(session?.user.isNewUser);
+    //redirect("/getting-started");
+  }
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>

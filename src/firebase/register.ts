@@ -1,5 +1,9 @@
 import { auth, db } from "@/firebase/configs";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export const signUp = async (email: string, password: string) => {

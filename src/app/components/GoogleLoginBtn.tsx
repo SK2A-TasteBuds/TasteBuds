@@ -2,7 +2,6 @@
 import Image from "next/image";
 import googleIcon from "@/assets/svg/googleIcon.svg";
 import { signIn } from "next-auth/react";
-import { doc, getDoc } from "firebase/firestore";
 
 export const GoogleLoginBtn = () => {
   const handleGoogleSignIn = async () => {
