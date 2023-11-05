@@ -16,16 +16,16 @@ export const LoginForm = () => {
       password,
       redirect: false,
     });
-    console.log(result);
+   
     if (result && "status" in result && result.status === 200 && result.ok) {
       router.push("/");
     } else {
-      console.log("error : ", result?.error);
+      console.log("error : ", result);
     }
   };
 
   return (
-    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow px-6 pb-8 mx-auto ">
+    <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow px-6 py-8 mx-auto ">
       <div className="space-y-6">
         <div>
           <label
