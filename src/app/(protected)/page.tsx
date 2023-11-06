@@ -18,8 +18,8 @@ export default function Main() {
             </div>
 
             <div className="good-bad flex flex-row h-10 justify-center">
-                <button className="mr-20"><img src="https://www.svgrepo.com/show/421162/bad-dislike-thumbs-down.svg" alt="good" className=" object-cover w-full h-full" /></button>
-                <button className=""><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover w-full h-full" /></button>
+                <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/471376/face-neutral.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-full w-10 " /></button>
+                <button className=" rounded-full bg-[#D9D9D9] h-full w-10 "><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover rounded-full bg-[#D9D9D9] h-full w-10 " /></button>
             </div>
 
             <div className="under-menu-bar flex flex-row bg-gray">
