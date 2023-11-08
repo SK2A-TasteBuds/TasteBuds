@@ -7,10 +7,10 @@ import SignOutBtn from "../components/SignOutBtn";
 export default async function Main() {
   const session = await getServerSession(authOptions);
 
-  if (session?.user.isNewUser) {
-    console.log(session?.user.isNewUser);
-    redirect("/getting-started");
-  }
+  // if (session?.user.isNewUser) {
+  //   console.log(session?.user.isNewUser);
+  //   redirect("/getting-started");
+  // }
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>
@@ -31,7 +31,7 @@ export default async function Main() {
       </div>
 
             <div className="good-bad flex flex-row h-10 justify-center">
-              <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/471376/face-neutral.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-full w-10 " /></button>
+              <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/513858/thumbs-down.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-[80%] w-[100%] " /></button>
               <button className=" rounded-full bg-[#D9D9D9] h-full w-10 "><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover rounded-full bg-[#D9D9D9] h-full w-10 " /></button>
             </div>
 
