@@ -1,24 +1,60 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-const GeolocationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [geolocation, setGeolocation] = useState(null);
-  useEffect(() => {
-    // Get user's current lng lat
-    if (!navigator.geolocation) {
-      console.log("Geolocation is not supported by your browser");
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { longitude, latitude } = position.coords;
-        },
-        (error) => {
-          console.log("Error retrieving location:", error.message);
-        }
-      );
-    }
-  }, []);
-  return <div>{children}</div>;
+// types
+type Location = {
+  lat: number;
+  lng: number;
 };
 
-export default GeolocationProvider;
+type GeolocationContextType = {
+  location: Location | null;
+  error: string | null;
+};
+
+const GeolocationContext = createContext<GeolocationContextType | undefined>(
+  undefined
+);
+
+//hooks
+export const useGeolocation = () => {
+  const context = useContext(GeolocationContext);
+  if (!context) {
+    throw new Error("useGeolocation must be used within a GeolocationProvider");
+  }
+  return context;
+};
+
+//provider
+export const GeolocationProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [location, setLocation] = useState<Location | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (err) => {
+          setError(err.message);
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by your browser.");
+    }
+  }, []);
+
+  return (
+    <GeolocationContext.Provider value={{ location, error }}>
+      {children}
+    </GeolocationContext.Provider>
+  );
+};
