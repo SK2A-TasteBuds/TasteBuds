@@ -4,11 +4,7 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import SessionProvider from "@/contexts/SessionProvider";
-import {
-  GeolocationProvider,
-  useGeolocation,
-} from "@/contexts/GeolocationProvider";
-
+import { GeolocationProvider } from "@/contexts/GeolocationProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,15 +12,11 @@ export const metadata: Metadata = {
   description: "TasteBuds app",
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
+    <html lang='en'>
       <body className={inter.className}>
         <SessionProvider session={session}>
           <GeolocationProvider>{children}</GeolocationProvider>

@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
         存在しない場合は存在しない場合はユーザー データを保存
       */
       if (account?.provider === "google") {
-        console.log(user);
+        //console.log(user);
         const credential = GoogleAuthProvider.credential(account?.id_token);
 
         const userCredential = await signInWithCredential(auth, credential);
@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.sub;
       session.user.isNewUser = token.isNewUser;
 
-      console.log("session callback:", token);
+      //console.log("session callback:", token);
       return session;
     },
     async jwt({ token, account, user }) {

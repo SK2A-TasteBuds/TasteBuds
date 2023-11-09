@@ -12,9 +12,8 @@ type GeolocationContextType = {
   error: string | null;
 };
 
-const GeolocationContext = createContext<GeolocationContextType | undefined>(
-  undefined
-);
+//context to
+const GeolocationContext = createContext<GeolocationContextType | undefined>(undefined);
 
 //hooks
 export const useGeolocation = () => {
@@ -26,15 +25,12 @@ export const useGeolocation = () => {
 };
 
 //provider
-export const GeolocationProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const GeolocationProvider = ({ children }: { children: React.ReactNode }) => {
   const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    //fetching user
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
