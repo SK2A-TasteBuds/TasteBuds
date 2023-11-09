@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import SignOutBtn from "../components/SignOutBtn";
+import Footer from "../components/footer";
 export default async function Main() {
   const session = await getServerSession(authOptions);
 
@@ -24,55 +25,20 @@ export default async function Main() {
           />
         </div>
 
-        <div className='absolute bottom-20 left-10  p-2 bg-transparent z-20'>
+        <div className='absolute bottom-0 left-10  p-2 bg-transparent z-20'>
           <p className='bg-transparent'>ECCパフェ</p>
           <p className='bg-transparent'>中崎町</p>
         </div>
       </div>
 
-            <div className="good-bad flex flex-row h-10 justify-center">
-              <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/513858/thumbs-down.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-[80%] w-[100%] " /></button>
-              <button className=" rounded-full bg-[#D9D9D9] h-full w-10 "><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover rounded-full bg-[#D9D9D9] h-full w-10 " /></button>
-            </div>
+        <div className="good-bad flex flex-row h-10 justify-center mb-5">
+          <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/513858/thumbs-down.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-[80%] w-[100%] " /></button>
+          <button className=" rounded-full bg-[#D9D9D9] h-full w-10 "><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover rounded-full bg-[#D9D9D9] h-full w-10" /></button>
+        </div>
 
-      <div className='under-menu-bar flex flex-row bg-gray'>
-        <div className='w-1/5'>
-          <img
-            src='https://www.svgrepo.com/show/527754/home-1.svg'
-            alt=''
-            className='w-full h-auto'
-          />
-        </div>
-        <div className='w-1/5'>
-          <img
-            src='https://www.svgrepo.com/show/527754/home-1.svg'
-            alt=''
-            className='w-full h-auto'
-          />
-        </div>
-        <div className='w-1/5'>
-          <img
-            src='https://www.svgrepo.com/show/527754/home-1.svg'
-            alt=''
-            className='w-full h-auto'
-          />
-        </div>
-        <div className='w-1/5'>
-          <img
-            src='https://www.svgrepo.com/show/527754/home-1.svg'
-            alt=''
-            className='w-full h-auto'
-          />
-        </div>
-        <div className='w-1/5'>
-          <img
-            src='https://www.svgrepo.com/show/527754/home-1.svg'
-            alt=''
-            className='w-full h-auto'
-          />
-        </div>
-      </div>
-      <SignOutBtn></SignOutBtn>
+      
+      <Footer></Footer>
+      {/* <SignOutBtn></SignOutBtn> */}
     </div>
   );
 }

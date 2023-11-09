@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import List from "./ShowListTest";
-
+import Footer from "../components/footer";
 export default function Page() {
     const [test, setTest] = useState<boolean>(false);
     function setKeep() {
@@ -14,7 +14,7 @@ export default function Page() {
         <div className="flex flex-col ">
             <div className="flex flex-col h-3/5">
                 <div className="justify-center items-center">
-                    <img src="https://www.svgrepo.com/show/448233/kubernetes.svg" alt="" className="h-[100px] w-full" />
+                    <img src="https://www.svgrepo.com/show/448233/kubernetes.svg" alt="" className="h-[80px] w-full" />
                 </div>
                 <div className="justify-center items-center">
                     <img src="https://www.svgrepo.com/show/481587/monkey.svg" alt="" className="h-[50px] w-full" />
@@ -33,6 +33,7 @@ export default function Page() {
             </div>
 
             <List condition={test} ></List>
+            <Footer></Footer>
 
         </div>
     );

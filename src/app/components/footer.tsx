@@ -22,8 +22,8 @@ const Footer = () => {
         <footer className='w-full'>
             <div style={containerStyle} >
                 {/* <Image src={rectangle} alt='Rectangle' /> */}
-                <div className='bg-slate-400 rounded-3xl ' style={overlayStyle} >
-                    <div className='bg-slate-400 rounded-3xl w-full h-fu flex'>
+                <div className='bg-[#D9D9D9] rounded-3xl ' style={overlayStyle} >
+                    <div className='bg-[#D9D9D9] rounded-3xl w-full h-fu flex'>
                         <button className='ml-12'>
                             <Image src={homeSvg} alt='Home'style={{backgroundColor: '#D9D9D9',borderRadius: '40px',}}/>
                         </button>
@@ -49,7 +49,7 @@ const Footer = () => {
                         
                         
                     </div>
-                    <Image className='bg-slate-400 rounded-b-3xl w-full' src={VactorSvg} alt='Vector'/>
+                    <Image className='bg-[#D9D9D9] rounded-b-3xl w-full' src={VactorSvg} alt='Vector'/>
                 </div>
             </div>
         </footer>
