@@ -34,8 +34,6 @@ export default function Page() {
 
             <List condition={test} ></List>
 
-            
-
         </div>
     );
 }

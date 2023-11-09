@@ -1,4 +1,4 @@
-export default function KeepListLayout({
+export default function PageLayout({
     children,
 }: {
     children: React.ReactNode;
