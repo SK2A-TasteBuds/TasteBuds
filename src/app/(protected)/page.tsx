@@ -1,16 +1,23 @@
+"use client";
 // 画像は仮です
 //name気に入らなかったら変えてもらって構いません
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { useGeolocation } from "@/contexts/GeolocationProvider";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import SignOutBtn from "../components/SignOutBtn";
-export default async function Main() {
-  const session = await getServerSession(authOptions);
 
-  // if (session?.user.isNewUser) {
-  //   console.log(session?.user.isNewUser);
-  //   redirect("/getting-started");
-  // }
+
+export default function Main() {
+  const { location, error } = useGeolocation();
+
+  console.log(location);
+  const getStore = async () => {
+    const res = await fetch(`/api/stores/?lng=${location?.lng}&lat=${location?.lat}`);
+    const data = await res.json();
+    console.log(data);
+  };
+  getStore();
+
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>
