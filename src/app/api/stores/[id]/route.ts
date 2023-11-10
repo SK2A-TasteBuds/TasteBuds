@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  console.log("Location API was HIT !");
-  const { searchParams } = new URL(request.url);
-  const lng = searchParams.get("lng");
-  const lat = searchParams.get("lat");
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id; //
 
   const res = await fetch(
-    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&lat=${lat}&lng=${lng}&range=3&order=4&format=json`
+    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&id=${id}&format=json`
   );
   const data = await res.json();
+
   const filteredData = data.results.shop //if data.results.shop map else empty arr
     ? data.results.shop.map((item: Store) => ({
         id: item.id,
