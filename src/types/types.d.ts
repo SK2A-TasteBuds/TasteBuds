@@ -25,3 +25,7 @@ interface Store {
     };
   };
 }
+
+type Genre = {
+  name: string;
+};

@@ -1,14 +1,10 @@
-export default function KeepListLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    return (
-        <section>
-            {/* Include shared UI here e.g. a header or sidebar */}
-            <nav></nav>
+export default function KeepListLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <section>
+      {/* Include shared UI here e.g. a header or sidebar */}
+      <nav></nav>
 
-            {children}
-        </section>
-    );
+      {children}
+    </section>
+  );
 }
