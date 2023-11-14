@@ -78,9 +78,12 @@ function BottomNav({ session }: { session: Session | null }) {
         </Link>
 
         <Link
-          href={`/user/${session?.user.name}`}
+          href={`/user/${session?.user.name}/keeps`}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
-            pathname === "/profile" ? "border-orange-400" : "border-none"
+            pathname === `/user/${session?.user.name}/keeps` ||
+            pathname === `/user/${session?.user.name}/likes`
+              ? "border-orange-400"
+              : "border-none"
           } `}
           id='user-nav'
         >
@@ -89,7 +92,10 @@ function BottomNav({ session }: { session: Session | null }) {
             viewBox='0 0 24 24'
             fill='currentColor'
             className={`w-6 h-6 text-zinc-400  ${
-              pathname === "/profile" ? "fill-orange-400" : "fill-current"
+              pathname === `/user/${session?.user.name}/keeps` ||
+              pathname === `/user/${session?.user.name}/likes`
+                ? "fill-orange-400"
+                : "fill-current"
             }`}
           >
             <path
