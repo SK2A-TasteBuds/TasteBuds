@@ -1,17 +1,18 @@
+"use client";
 // 画像は仮です
 //name気に入らなかったら変えてもらって構いません
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
-import SignOutBtn from "../components/SignOutBtn";
-import Footer from "../components/footer";
-export default async function Main() {
-  const session = await getServerSession(authOptions);
+import { useGeolocation } from "@/contexts/GeolocationProvider";
 
-  // if (session?.user.isNewUser) {
-  //   console.log(session?.user.isNewUser);
-  //   redirect("/getting-started");
-  // }
+export default function Main() {
+  const { location, error } = useGeolocation();
+
+  // console.log(location);
+  const getStore = async () => {
+    const res = await fetch(`/api/stores/?lng=${location?.lng}&lat=${location?.lat}`);
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>
@@ -25,20 +26,11 @@ export default async function Main() {
           />
         </div>
 
-        <div className='absolute bottom-0 left-10  p-2 bg-transparent z-20'>
+        <div className='absolute bottom-20 left-10  p-2 bg-transparent z-20'>
           <p className='bg-transparent'>ECCパフェ</p>
           <p className='bg-transparent'>中崎町</p>
         </div>
       </div>
-
-        <div className="good-bad flex flex-row h-10 justify-center mb-5">
-          <button className="mr-20 rounded-full bg-[#D9D9D9] h-full w-10 shadow-inner"><img src="https://www.svgrepo.com/show/513858/thumbs-down.svg" alt="good" className=" object-cover  rounded-full bg-[#D9D9D9] h-[80%] w-[100%] " /></button>
-          <button className=" rounded-full bg-[#D9D9D9] h-full w-10 "><img src="https://www.svgrepo.com/show/478767/good-job-hand-2.svg" alt="good" className="object-cover rounded-full bg-[#D9D9D9] h-full w-10" /></button>
-        </div>
-
-      
-      <Footer></Footer>
-      {/* <SignOutBtn></SignOutBtn> */}
     </div>
   );
 }
