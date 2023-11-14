@@ -1,17 +1,22 @@
 "use client";
+import { getReviews, postReview } from "@/utils/reviews";
 // 画像は仮です
 //name気に入らなかったら変えてもらって構いません
 import { useGeolocation } from "@/contexts/GeolocationProvider";
 
 export default function Main() {
   const { location, error } = useGeolocation();
+  const storeId = "ScBwzdsH0US78gvNMOH8";
+  // Example usage
 
-  // console.log(location);
-  const getStore = async () => {
-    const res = await fetch(`/api/stores/?lng=${location?.lng}&lat=${location?.lat}`);
-    const data = await res.json();
-    console.log(data);
+  const newReviewData = {
+    userId: "user123",
+    rating: 4.5,
+    comment: "Excellent service!",
+    // Other review details
   };
+
+  getReviews(storeId);
 
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>

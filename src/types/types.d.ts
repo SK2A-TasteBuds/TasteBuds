@@ -29,3 +29,8 @@ interface Store {
 type Genre = {
   name: string;
 };
+
+type Coords = {
+  lng: Number;
+  lat: Number;
+};
