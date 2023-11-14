@@ -13,3 +13,5 @@ export const getStore = async (store_id: string) => {
   console.log(data);
   return data;
 };
+
+export const getUserKeepStore = () => {};

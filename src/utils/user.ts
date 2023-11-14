@@ -8,6 +8,7 @@ import {
   setDoc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { db } from "@/firebase/configs";
 
@@ -70,5 +71,18 @@ export const addToKeeps = async (user_id: string, store_id: string) => {
     console.log("Store added to keeps successfully!");
   } catch (error) {
     console.error("Error adding store to keeps:", error);
+  }
+};
+
+export const removeFromKeeps = async (user_id: string, store_id: string) => {
+  const docRef = doc(db, "users", user_id);
+  try {
+    await updateDoc(docRef, {
+      keeps: arrayRemove(store_id),
+    });
+
+    console.log("Store removed from keeps successfully!");
+  } catch (error) {
+    console.error("Error removing store from keeps:", error);
   }
 };

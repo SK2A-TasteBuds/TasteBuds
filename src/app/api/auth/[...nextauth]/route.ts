@@ -9,13 +9,7 @@ import {
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import {
-  doc,
-  setDoc,
-  collection,
-  serverTimestamp,
-  getDoc,
-} from "firebase/firestore";
+import { doc, setDoc, collection, serverTimestamp, getDoc } from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -55,7 +49,7 @@ export const authOptions: NextAuthOptions = {
   */
   callbacks: {
     async signIn({ account, profile, user }) {
-      console.log("signIN callback", user);
+      //console.log("signIN callback", user);
       if (account?.provider === "credentials") {
         user.id = user.uid;
         console.log(user.id);
