@@ -7,8 +7,18 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   const user = session?.user; // ログインしていなければnullになる。
   return (
     <section>
-      <p className='overflow-x-auto'>{`${JSON.stringify(user)}`}</p>
+      {/* Debug用 */}
+      {session && (
+        <>
+          <p className='text-xs'>{user.id}</p>
+          <p className='text-xs'>{user.name}</p>
+          <p className='text-xs'>{user.email}</p>
+          <p className='text-xs overflow-scroll'>{user.image}</p>
+        </>
+      )}
+
       {/* Include shared UI here e.g. a header or sidebar */}
+
       {children}
       <BottomNav session={session} />
     </section>

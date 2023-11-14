@@ -2,7 +2,6 @@ import { Session } from "next-auth";
 
 function Header({ session }: { session: Session | null }) {
   const user = session?.user;
-  console.log(user);
 
   return (
     <div className=' sticky top-0 '>
