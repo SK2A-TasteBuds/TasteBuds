@@ -1,4 +1,11 @@
-import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/configs";
 
 //客店舗のレビュー

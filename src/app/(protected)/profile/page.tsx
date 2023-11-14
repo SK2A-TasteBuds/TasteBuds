@@ -4,7 +4,6 @@ import List from "./List";
 function Profile() {
   return (
     <>
-      {/* <List /> */}
       <List />
     </>
   );
