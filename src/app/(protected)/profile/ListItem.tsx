@@ -2,7 +2,7 @@ function ListItem(props: any) {
   const { imgUrl, title, desc } = props;
 
   return (
-    <div className="max-w-xs  max-h-fit md:max-w-md rounded-xl  overflow-hidden shadow-sm border ">
+    <div className="max-w-xs  max-h-fit  rounded-xl overflow-hidden shadow-sm border mx-auto ">
       <img
         className="w-full max-h-min "
         src={imgUrl}
