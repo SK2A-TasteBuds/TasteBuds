@@ -14,7 +14,7 @@ async function Search() {
   return (
     <div>
       Search page
-      {data.map((item, index) => (
+      {data.map((item: string, index: number) => (
         <p key={index}>{item}</p>
       ))}
     </div>
