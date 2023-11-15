@@ -1,3 +1,4 @@
+import { Genre } from "@/types/types";
 import { NextResponse } from "next/server";
 
 export async function GET() {

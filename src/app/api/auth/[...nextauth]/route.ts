@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
   */
   callbacks: {
     async signIn({ account, profile, user }) {
-      console.log("signIN callback", user);
+      //console.log("signIN callback", user);
       if (account?.provider === "credentials") {
         user.id = user.uid;
         console.log(user.id);
@@ -82,6 +82,7 @@ export const authOptions: NextAuthOptions = {
             name: profile?.name,
             email: profile?.email,
             image: profile?.picture,
+            keeps: [],
             created_at: serverTimestamp(),
           });
         } else {
