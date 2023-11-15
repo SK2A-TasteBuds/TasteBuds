@@ -10,8 +10,8 @@ function Header({ session }: { session: Session | null }) {
           {/* <!-- profile image --> */}
           <img
             className='w-20 h-20 object-cover rounded-full
-                   border-2 border-pink-600 p-1'
-            src={user.image}
+                   border-2 '
+            src={session?.user.image}
             alt='profile'
           />
         </div>

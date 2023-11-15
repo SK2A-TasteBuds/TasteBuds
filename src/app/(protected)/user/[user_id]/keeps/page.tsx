@@ -5,7 +5,6 @@ import { getUserKeepStore } from "@/utils/stores";
 
 async function page() {
   const data = await getUserKeepStore("Z5FaMtK2wqNnskIcgfQPxC5nspc2");
-  //console.log(data);
 
   return (
     <>
