@@ -9,7 +9,13 @@ import {
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import { doc, setDoc, collection, serverTimestamp, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -76,6 +82,7 @@ export const authOptions: NextAuthOptions = {
             name: profile?.name,
             email: profile?.email,
             image: profile?.picture,
+            keeps: [],
             created_at: serverTimestamp(),
           });
         } else {

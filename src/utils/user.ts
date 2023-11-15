@@ -19,9 +19,11 @@ export const getUser = async (user_id: string) => {
 
   if (docSnap.exists()) {
     console.log("Document data:", docSnap.id, docSnap.data());
+    return docSnap.data();
   } else {
     // docSnap.data() will be undefined in this case
     console.log("No such document!");
+    return null;
   }
 };
 
@@ -51,10 +53,12 @@ export const getUserKeeps = async (user_id: string) => {
 
   if (docSnap.exists()) {
     const { keeps } = docSnap.data();
-    console.log(keeps);
+    //console.log(keeps);
+    return keeps;
   } else {
     // docSnap.data() will be undefined in this case
     console.log("No such document!");
+    return null;
   }
 };
 

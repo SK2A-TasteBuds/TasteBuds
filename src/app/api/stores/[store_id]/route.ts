@@ -1,8 +1,12 @@
 import { Store } from "@/types/types";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const id = params.id; //
+export async function GET(
+  request: Request,
+  { params }: { params: { store_id: string } }
+) {
+  const id = params.store_id; //
+  console.log(id);
 
   const res = await fetch(
     `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&id=${id}&format=json`
@@ -27,5 +31,5 @@ export async function GET(request: Request, { params }: { params: { id: string }
       }))
     : [];
 
-  return NextResponse.json({ data: filteredData });
+  return NextResponse.json(filteredData);
 }
