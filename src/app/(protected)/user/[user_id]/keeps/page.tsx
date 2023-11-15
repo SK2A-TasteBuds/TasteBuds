@@ -1,4 +1,4 @@
-import List2 from "../List2";
+import List from "../List";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getUserKeepStore } from "@/utils/stores";
@@ -10,7 +10,7 @@ async function page() {
     <>
       <h1>Keep page</h1>
 
-      <List2 items={data} />
+      <List items={data} />
     </>
   );
 }
