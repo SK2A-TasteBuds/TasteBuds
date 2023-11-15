@@ -3,10 +3,10 @@ function ListItem(props: any) {
 
   return (
     <div className='max-w-xs  max-h-fit  rounded-xl overflow-hidden shadow-sm border  '>
-      <img className='w-full max-h-40 ' src={photo} alt='Sunset in the mountains' />
+      <img className='w-full max-h-32 md:max-h-48 ' src={photo} alt='Sunset in the mountains' />
       <div className='p-2 h-1/2 bg-blue-200'>
-        <div className='font-bold text-xl mb-2'>{name}</div>
-        <p className='text-gray-700 text-base truncate ...'>{desc}</p>
+        <div className='font-bold truncate my-1'>{name}</div>
+        <p className='text-gray-700 truncate'>{desc}</p>
       </div>
     </div>
   );
