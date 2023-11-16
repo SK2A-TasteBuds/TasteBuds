@@ -1,16 +1,22 @@
+import Image from "next/image";
+import Link from "next/link";
 function ListItem(props: any) {
   const { id, photo, desc, name } = props;
 
   return (
-    <div className="max-w-xs  max-h-fit  rounded-xl overflow-hidden shadow-sm border  ">
-      <img
-        className="w-full max-h-32 md:max-h-48 "
-        src={photo}
-        alt="Sunset in the mountains"
-      />
-      <div className="p-2 h-1/2 bg-blue-200">
+    <div className=" max-w-xs rounded-xl overflow-hidden shadow-sm border  ">
+      <Link href={`/store/${id}`}>
+        <Image
+          className="w-full"
+          width={320}
+          height={320}
+          src={photo}
+          alt="Sunset in the mountains"
+        />
+      </Link>
+      <div className="p-2 bg-blue-200">
         <div className="font-bold truncate my-1">{name}</div>
-        {/* <p className="text-gray-700 truncate">{desc}</p> */}
+        <p className="text-gray-700 truncate">{desc}</p>
       </div>
     </div>
   );
@@ -26,6 +32,7 @@ function List({ items }: { items: any }) {
             photo={item.photo}
             desc={item.catch}
             name={item.name}
+            id={item.id}
           />
         ))}
       </div>
