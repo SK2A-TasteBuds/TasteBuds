@@ -5,7 +5,7 @@ function ListItem(props: any) {
 
   return (
     <div className=" max-w-xs rounded-xl overflow-hidden shadow-sm border  ">
-      <Link href={`/store/${id}`}>
+      <Link href={`/stores/${id}`}>
         <Image
           className="w-full"
           width={320}
