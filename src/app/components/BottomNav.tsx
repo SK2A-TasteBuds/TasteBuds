@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-function BottomNav() {
+import { Session } from "next-auth";
+function BottomNav({ session }: { session: Session | null }) {
   const pathname = usePathname();
+
   return (
     <div className=' fixed z-50 w-full h-12 max-w-xs -translate-x-1/2 bottom-4 left-1/2  rounded-full border '>
       <div className=' flex justify-center h-full max-w-sm  mx-auto  rounded-full shadow-xl '>
@@ -76,9 +78,12 @@ function BottomNav() {
         </Link>
 
         <Link
-          href={`/profile`}
+          href={`/user/${session?.user.name}/keeps`}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
-            pathname === "/profile" ? "border-orange-400" : "border-none"
+            pathname === `/user/${session?.user.name}/keeps` ||
+            pathname === `/user/${session?.user.name}/likes`
+              ? "border-orange-400"
+              : "border-none"
           } `}
           id='user-nav'
         >
@@ -87,7 +92,10 @@ function BottomNav() {
             viewBox='0 0 24 24'
             fill='currentColor'
             className={`w-6 h-6 text-zinc-400  ${
-              pathname === "/profile" ? "fill-orange-400" : "fill-current"
+              pathname === `/user/${session?.user.name}/keeps` ||
+              pathname === `/user/${session?.user.name}/likes`
+                ? "fill-orange-400"
+                : "fill-current"
             }`}
           >
             <path

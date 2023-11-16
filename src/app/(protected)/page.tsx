@@ -1,25 +1,16 @@
 "use client";
-import { getReviews, postReview } from "@/utils/reviews";
-// 画像は仮です
-//name気に入らなかったら変えてもらって構いません
+
 import { useGeolocation } from "@/contexts/GeolocationProvider";
+import { useSession } from "next-auth/react";
+import SignOutBtn from "../components/SignOutBtn";
 
 export default function Main() {
   const { location, error } = useGeolocation();
-  const storeId = "ScBwzdsH0US78gvNMOH8";
-  // Example usage
-
-  const newReviewData = {
-    userId: "user123",
-    rating: 4.5,
-    comment: "Excellent service!",
-    // Other review details
-  };
-
-  getReviews(storeId);
+  const { data: session, status } = useSession();
 
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
+      <SignOutBtn />
       <div className='store-img relative h-3/5 w-4/5  overflow-hidden'>
         <div className='swipe flex '>
           <div className='object-cover block h-full w-[20px] bg-[#ffc7b7] rounded-md absolute z-10 left-[245px]'></div>
