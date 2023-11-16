@@ -54,6 +54,48 @@ export const getUserCreatedReview = async (user_id: string) => {
   }
 };
 
+export const getUserReviewStoreId = async (user_id: string) => {
+  const reviewsCollectionGroup = collectionGroup(db, "reviews");
+
+  const q = query(reviewsCollectionGroup, where("user_id", "==", user_id));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const storeIDs = [];
+
+      // Loop through each review document
+      for (const doc of querySnapshot.docs) {
+        const reviewData = doc.data();
+
+        // Get the reference to the store document from the review document
+        const storeDocRef = doc.ref.parent.parent;
+
+        // Get the store ID from the store document
+        const storeID = storeDocRef?.id;
+
+        // You can also fetch additional data from the store document if needed
+        if (storeID) {
+          const storeDoc = await getDoc(storeDocRef);
+          const storeData = storeDoc.data();
+          // Do something with storeData if needed
+        }
+
+        storeIDs.push(storeID);
+      }
+
+      return storeIDs;
+    } else {
+      console.log("No reviews found for the user with ID:", user_id);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting reviews:", error);
+    throw error;
+  }
+};
+
 export const getUserKeeps = async (user_id: string) => {
   const docRef = doc(db, "users", user_id);
   const docSnap = await getDoc(docRef);
