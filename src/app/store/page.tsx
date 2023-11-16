@@ -221,7 +221,7 @@ export default function Page() {
                 </div>
             </div>
             
-            <BottomNav />
+            <BottomNav session={null} />
         </div>
         
     );
