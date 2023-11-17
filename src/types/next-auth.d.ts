@@ -14,6 +14,7 @@ declare module "next-auth" {
 
   interface User {
     id: string;
+    uid: string;
     isNewUser: boolean | undefined;
   }
 }

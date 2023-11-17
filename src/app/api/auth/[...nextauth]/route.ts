@@ -9,7 +9,13 @@ import {
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { auth, db } from "@/firebase/configs";
-import { doc, setDoc, collection, serverTimestamp, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -30,8 +36,8 @@ export const authOptions: NextAuthOptions = {
             }
             return null;
           })
-          .catch((error) => console.log(error))
           .catch((error) => {
+            console.log(error);
             const errorCode = error.code;
             const errorMessage = error.message;
           });
@@ -49,11 +55,16 @@ export const authOptions: NextAuthOptions = {
   */
   callbacks: {
     async signIn({ account, profile, user }) {
-      /*
+      //console.log("signIN callback", user);
+      if (account?.provider === "credentials") {
+        user.id = user.uid;
+        console.log(user.id);
+      }
+      if (account?.provider === "google") {
+        /*
         認証に Oauth を使用している場合は db にユーザーが存在するかどうかを確認
         存在しない場合は存在しない場合はユーザー データを保存
       */
-      if (account?.provider === "google") {
         //console.log(user);
         const credential = GoogleAuthProvider.credential(account?.id_token);
 
@@ -71,6 +82,7 @@ export const authOptions: NextAuthOptions = {
             name: profile?.name,
             email: profile?.email,
             image: profile?.picture,
+            keeps: [],
             created_at: serverTimestamp(),
           });
         } else {
@@ -82,6 +94,7 @@ export const authOptions: NextAuthOptions = {
 
         // Continue with the rest of your code
         user.isNewUser = isNewUser;
+        user.id = userCredential.user.uid;
         //console.log("user :", user);
       }
 
@@ -97,6 +110,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
       if (user) {
         token.isNewUser = user.isNewUser;
+        token.id = user.id;
         //console.log("jwt callback :", token);
       }
       return token;

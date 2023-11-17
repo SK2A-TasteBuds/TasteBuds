@@ -16,5 +16,6 @@ export const signUp = async (email: string, password: string) => {
   await setDoc(doc(usersRef, uid), {
     email: user_mail,
     created_at: serverTimestamp(),
+    keeps: [],
   });
 };

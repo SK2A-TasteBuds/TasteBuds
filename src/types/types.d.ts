@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 interface Store {
   id: string;
   name: string;
@@ -29,3 +31,16 @@ interface Store {
 type Genre = {
   name: string;
 };
+
+type Coords = {
+  lng: Number;
+  lat: Number;
+};
+
+interface reviewData {
+  comment: string;
+  create_at: Timestamp;
+  images: string[];
+  user_id: string;
+  user_name: string;
+}
