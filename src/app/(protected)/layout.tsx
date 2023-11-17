@@ -12,14 +12,14 @@ export default async function MainLayout({
   return (
     <section>
       {/* Debug用 */}
-      {session && (
+      {/* {session && (
         <>
           <p className="text-xs">{user.id}</p>
           <p className="text-xs">{user.name}</p>
           <p className="text-xs">{user.email}</p>
           <p className="text-xs overflow-scroll">{user.image}</p>
         </>
-      )}
+      )} */}
 
       {/* Include shared UI here e.g. a header or sidebar */}
 

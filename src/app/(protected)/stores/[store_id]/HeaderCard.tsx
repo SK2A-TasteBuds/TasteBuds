@@ -1,45 +1,19 @@
 import Image from "next/image";
 
-async function Headercard({ data }: { data: Promise<Response> }) {
-  const store = await data.then((res) => res.json());
-  console.log(store.photo);
-  const photo = store.photo;
-  return (
-    <div>
-      <div className=" flex flex-col md:flex-row items-center justify-center bg-blue-100  px-2 py-4">
-        <Image
-          src={photo}
-          alt={store.name}
-          height={320}
-          width={320}
-          priority={true}
-          className="rounded-lg "
-        />
-        <div className="w-full">
-          <p>{store.name}</p>
-          <p>{store.catch}</p>
-          <p>{store.genre.name}</p>
-          <p>{store.budget.name}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 async function HeaderCard_2({ data }: { data: Promise<Response> }) {
   const store = await data.then((res) => res.json());
   return (
-    <div className="mx-auto mt-11 max-w-sm w-full md:max-w-xl transform overflow-hidden rounded-lg bg-whiteshadow-md duration-300 hover:scale-105 hover:shadow-lg border shadow-xl ">
+    <div className="mx-auto mt-4 max-w-md w-full md:max-w-xl rounded-lg border px-1  sticky -top-56 z-30">
       <Image
-        className="h-60 w-full object-cover object-center rounded-2xl"
+        className="h-56 w-full rounded-2xl "
         src={store.photo}
         height={320}
         width={320}
         priority={true}
         alt="Product Image"
       />
-      <div className="p-4 m-1">
-        <div className="flex justify-between">
+      <div className="p-4 ">
+        <div className="flex justify-between ">
           <h3 className="text-xs">{store.genre.name}</h3>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +28,7 @@ async function HeaderCard_2({ data }: { data: Promise<Response> }) {
             />
           </svg>
         </div>
-        <h2 className=" text-lg font-bold text-gray-900">{store.name}</h2>
+        <h2 className=" text-lg font-bold text-gray-900 ">{store.name}</h2>
         <p className=" text-sm text-gray-700 py-1">{store.catch}</p>
         <div className="flex py-1">
           <svg
