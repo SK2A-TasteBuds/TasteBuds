@@ -8,13 +8,7 @@ import { useEffect,useState } from "react";
 export default function Main() {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  // const [store_img,setImg] = useState("https://crea.ismcdn.jp/mwimgs/9/3/1200wm/img_93abdd5347237682a14cf050f2e2a6bd74395.jpg");
-  // let sources = [
-  //   "https://crea.ismcdn.jp/mwimgs/9/3/1200wm/img_93abdd5347237682a14cf050f2e2a6bd74395.jpg",
-  //   "https://www.masale.jp/images/lineup/salonmenu/parfait2020spring.jpg",
-  //   "https://okayama-parfait.com/wp/wp-content/uploads/2021/07/38678dd047770dc7c5e843ae786d97af-scaled.jpg",
-  //   "https://rimage.gnst.jp/rest/img/grdtt21e0000/s_0n8x.jpg?t=1508901389"
-  // ];
+  
   const [store,setStore] = useState({
     name:"ECCパフェ",
     imgs:[
