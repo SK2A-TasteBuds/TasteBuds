@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { store_id: string } }) {
         data={fetch(`http://localhost:3000/api/stores/${store_id}`)}
       />
       <ReviewGrid />
-      <Reviews />
+      <Reviews store_id={store_id} />
     </section>
   );
 }

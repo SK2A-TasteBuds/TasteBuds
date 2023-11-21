@@ -1,7 +1,10 @@
 import Image from "next/image";
-function ReviewItem() {
+import { getReviews } from "@/utils/reviews";
+function ReviewItem(props: any) {
+  console.log(props);
+  const { user_name, create_at, comment } = props;
   return (
-    <div className="p-2 text-base rounded-lg max-w-md md:max-w-2xl">
+    <div className="p-2 text-base rounded-lg max-w-md md:max-w-2xl w-full">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center ">
           <p className="inline-flex items-center mr-3 text-sm text-gray-900  font-semibold">
@@ -10,10 +13,11 @@ function ReviewItem() {
               height={120}
               className="mr-2 w-6 h-6 rounded-full"
               src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-              alt="Michael Gough"
+              alt={user_name}
             />
-            Michael Gough
+            {user_name}
           </p>
+          {/* like icons */}
           <div className="flex gap-2 ">
             <svg
               width="24"
@@ -42,26 +46,28 @@ function ReviewItem() {
           </div>
         </div>
       </div>
-      <p className="text-gray-500 ">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maxime ea
-        tenetur sunt eligendi ipsum illo mollitia iste. Qui possimus quasi
-        assumenda ex consectetur maxime optio voluptatem ut ipsa quod!
-      </p>
+      <p className="text-gray-500 ">{comment}</p>
       <p className="text-xs text-zinc-400 flex justify-end">
-        <time dateTime="2022-02-08" title="February 8th, 2022">
-          Feb. 8, 2022
+        <time
+          dateTime={create_at.toDate()}
+          title={create_at.toDate().toString()}
+        >
+          {create_at.toDate().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </time>
       </p>
     </div>
   );
 }
 
-function Reviews() {
-  const numberOfReviews = 5;
+async function Reviews({ store_id }: { store_id: string }) {
+  const reviews = await getReviews(store_id);
 
-  // Use Array.from to create an array of ReviewItem components
-  const reviewsList = Array.from({ length: numberOfReviews }, (_, index) => (
-    <ReviewItem key={index} />
+  const reviewsList = reviews.map((review, index) => (
+    <ReviewItem key={index} {...review} />
   ));
 
   return (

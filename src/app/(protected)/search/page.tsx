@@ -1,7 +1,6 @@
-
 "use client";
-import React, { useState, useEffect } from 'react';
-import FoodCard from './FoodCard';
+import React, { useState, useEffect } from "react";
+import FoodCard from "./FoodCard";
 // import dining_img from "@/assets/img/asia.svg"
 // import izakaya_img from "@/assets/img/izakaya.svg"
 // import create_img from "@/assets/img/create.svg"
@@ -25,15 +24,13 @@ export default function Home() {
   // 食品ジャンルのデータを格納するための状態
   const [foodItems, setItems] = useState([]);
   // const foodimg = [
-  //   dining_img ,izakaya_img,create_img,wasyoku_img,yousyoku_img,italian_img,tyuuka_img,yakiniku_img,korean_img,asia_img,country_img,karaoke_img,bar_img,ramen_img,okonomiyaki_img,cafe_img,other_img      
+  //   dining_img ,izakaya_img,create_img,wasyoku_img,yousyoku_img,italian_img,tyuuka_img,yakiniku_img,korean_img,asia_img,country_img,karaoke_img,bar_img,ramen_img,okonomiyaki_img,cafe_img,other_img
   // ]
 
   useEffect(() => {
     // APIからデータを非同期で取得する関数
     async function fetchData() {
-      const res = await fetch(
-        "http://localhost:3000/api/genre"
-      );
+      const res = await fetch("http://localhost:3000/api/genre");
       const data = await res.json();
       console.log(data);
       setItems(data);
@@ -44,8 +41,6 @@ export default function Home() {
     // データ取得関数を呼び出し
     fetchData();
   }, []); // 空の依存配列で効果はコンポーネントのマウント時にのみ実行されます
-
-  
 
   // コンポーネントのUI部分
   return (
@@ -82,5 +77,3 @@ async function Search() {
     </div>
   );
 }
-
-export default Search;

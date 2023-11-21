@@ -7,7 +7,7 @@ function ListItem(props: any) {
     <div className=" max-w-xs rounded-xl overflow-hidden shadow-sm border  ">
       <Link href={`/stores/${id}`}>
         <Image
-          className="w-full lg:h-80"
+          className="w-full h-48 lg:h-80"
           width={320}
           height={320}
           src={photo}
@@ -15,12 +15,12 @@ function ListItem(props: any) {
         />
       </Link>
       <div className="py-2 ">
-        <div className="font-extrabold text-xs text-center truncate my-1">
+        <div className="font-extrabold text-sm text-center truncate my-1">
           {name}
         </div>
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-around p-2">
         <div className="rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@ function ListItem(props: any) {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="w-8 h-8 p-2 text-red-500 bg-slate-400 rounded-full"
+            className="w-8 h-8 p-1  text-red-500 bg-slate-400 rounded-full"
           >
             <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
           </svg>
