@@ -3,25 +3,48 @@
 import { useGeolocation } from "@/contexts/GeolocationProvider";
 import { useSession } from "next-auth/react";
 import SignOutBtn from "../components/SignOutBtn";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Main() {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  
-  const [store,setStore] = useState({
-    name:"ECCパフェ",
-    img:"https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg",
-    address:"中崎町"
+  const [data, setData] = useState(null);
+  interface StoreState {
+    name: string,
+    img: string,
+    address: string
+  }
+  const [store, setStore] = useState<StoreState>({
+    name: "ECCパフェ",
+    img: "https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg",
+    address: "中崎町"
   })
+  useEffect(() => {
+    if (location) {
+      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data);
+          setStore({
+            name:data["data"][0]["name"],
+            img: data["data"][0]["photo"],
+            address:data["data"][0]["address"]
+          })
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [location]);
+
   // const [index,setIndex] = useState(0);
-  let imgIndex = 0;
-  let show:HTMLElement|null;
-  useEffect(()=>{
+  //let imgIndex = 0;
+  useEffect(() => {
+
     const img = document.getElementById('store-img');
-    show = document.getElementById('show-img');
-    if(!img || !show)return;
+    if (!img) return;
     console.log("ok");
     //画像が複数枚の時の処理
     // const ChangeImg = () =>{
@@ -30,23 +53,23 @@ export default function Main() {
     //   show.setAttribute("src",store.imgs[imgIndex]);
     //   console.log(imgIndex);
     // }
-    const ChangeStore = ()=>{
-      nextStore("ECC焼肉","https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg","大阪梅田");
+    const ChangeStore = () => {
+      nextStore("ECC焼肉", "https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg", "大阪梅田");
     }
-    img.addEventListener('click',ChangeStore )
-    return()=>{
-      img.removeEventListener('click',ChangeStore)
+    img.addEventListener('click', ChangeStore)
+    return () => {
+      img.removeEventListener('click', ChangeStore)
     }
-  },[store.img]);
-  const nextStore = (sName:string,sImgs:string,sAddress:string)=>{
+  }, [store.img]);
+  const nextStore = (sName: string, sImgs: string, sAddress: string) => {
     //仮
     setStore({
-      name:sName,
-      img:sImgs,
-      address:sAddress
+      name: sName,
+      img: sImgs,
+      address: sAddress
     });
-    
-      
+
+
   }
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
@@ -62,7 +85,7 @@ export default function Main() {
             id="show-img"
             loading="lazy"
           />
-          
+
         </div>
 
 
@@ -76,26 +99,26 @@ export default function Main() {
         <div className="object-cover w-full h-full flex justify-center">
           <div className="bad rounded-full bg-gray-400 object-cover w-2/6 h-2/5 justify-center items-center flex">
             <button className="flex"
-              onClick={()=>nextStore(
+              onClick={() => nextStore(
                 "ECCラーメン",
                 "https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg",
                 "東京"
               )}
             >
-              <img src="https://www.svgrepo.com/show/449596/thumbs-down.svg" alt="" className="bg-transparent object-cover w-full h-full m-auto"/>
+              <img src="https://www.svgrepo.com/show/449596/thumbs-down.svg" alt="" className="bg-transparent object-cover w-full h-full m-auto" />
             </button>
           </div>
         </div>
         <div className="object-cover w-full h-full flex justify-center">
           <div className="good rounded-full bg-gray-400 object-cover w-2/6 h-2/5 justify-center items-center flex">
-            <button className="flex" 
-              onClick={()=>nextStore(
+            <button className="flex"
+              onClick={() => nextStore(
                 "ECC焼肉",
                 "https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg",
                 "梅田"
               )}
             >
-              <img src="https://www.svgrepo.com/show/449597/thumbs-up.svg" alt="" className="bg-transparent object-cover w-full h-full m-auto"/>
+              <img src="https://www.svgrepo.com/show/449597/thumbs-up.svg" alt="" className="bg-transparent object-cover w-full h-full m-auto" />
             </button>
           </div>
         </div>
