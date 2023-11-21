@@ -21,7 +21,9 @@ function ReviewGrid() {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-0 mx-auto ">{reviewsList}</div>
+      <div className="grid grid-cols-3 gap-0 mx-auto max-w-2xl ">
+        {reviewsList}
+      </div>
     </>
   );
 }
