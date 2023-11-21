@@ -26,8 +26,8 @@ export default function Main() {
     //画像が複数枚の時の処理
     // const ChangeImg = () =>{
     //   imgIndex++;
-    //   if(imgIndex > store.img.length-1)imgIndex=0;
-    //   show.setAttribute("src",store.img[imgIndex]);
+    //   if(imgIndex > store.imgs.length-1)imgIndex=0;
+    //   show.setAttribute("src",store.imgs[imgIndex]);
     //   console.log(imgIndex);
     // }
     const ChangeStore = ()=>{
