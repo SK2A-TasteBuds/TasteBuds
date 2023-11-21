@@ -3,9 +3,9 @@ import Image from "next/image";
 async function HeaderCard_2({ data }: { data: Promise<Response> }) {
   const store = await data.then((res) => res.json());
   return (
-    <div className='mx-auto mt-4 max-w-md w-full md:max-w-3xl md:h-fit md:flex sticky -top-[235px] md:-top-[320px] md:mb-10  z-30 py-2  '>
+    <div className='mx-auto mt-4 max-w-md w-full md:max-w-3xl md:h-fit md:flex sticky -top-[265px] md:-top-1 md:mb-10  z-30 py-2  '>
       <Image
-        className='h-64 w-full rounded-xl md:h-72 lg:h-80'
+        className='h-64 w-full rounded-xl md:h-72 lg:h-80 px-1'
         src={store.photo}
         height={400}
         width={400}
