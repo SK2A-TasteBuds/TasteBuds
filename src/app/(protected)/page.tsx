@@ -5,47 +5,48 @@ import { useSession } from "next-auth/react";
 import SignOutBtn from "../components/SignOutBtn";
 import { useEffect,useState } from "react";
 
+
 export default function Main() {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
   
   const [store,setStore] = useState({
     name:"ECCパフェ",
-    imgs:[
-      "https://crea.ismcdn.jp/mwimgs/9/3/1200wm/img_93abdd5347237682a14cf050f2e2a6bd74395.jpg",
-      "https://www.masale.jp/images/lineup/salonmenu/parfait2020spring.jpg",
-      "https://okayama-parfait.com/wp/wp-content/uploads/2021/07/38678dd047770dc7c5e843ae786d97af-scaled.jpg",
-      "https://rimage.gnst.jp/rest/img/grdtt21e0000/s_0n8x.jpg?t=1508901389"
-    ],
+    img:"https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg",
     address:"中崎町"
   })
   // const [index,setIndex] = useState(0);
   let imgIndex = 0;
+  let show:HTMLElement|null;
   useEffect(()=>{
     const img = document.getElementById('store-img');
-    const show = document.getElementById('show-img');
+    show = document.getElementById('show-img');
     if(!img || !show)return;
     console.log("ok");
-    const ChangeImg = () =>{
-      imgIndex++;
-      if(imgIndex > store.imgs.length-1)imgIndex=0;
-      show.setAttribute("src",store.imgs[imgIndex]);
-      console.log(imgIndex);
+    //画像が複数枚の時の処理
+    // const ChangeImg = () =>{
+    //   imgIndex++;
+    //   if(imgIndex > store.img.length-1)imgIndex=0;
+    //   show.setAttribute("src",store.img[imgIndex]);
+    //   console.log(imgIndex);
+    // }
+    const ChangeStore = ()=>{
+      nextStore("ECC焼肉","https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg","大阪梅田");
     }
-    img.addEventListener('click',ChangeImg )
+    img.addEventListener('click',ChangeStore )
     return()=>{
-      img.removeEventListener('click',ChangeImg)
+      img.removeEventListener('click',ChangeStore)
     }
-  },[store.imgs]);
-  const nextStore = (sName:string,sImgs:string[],sAddress:string)=>{
+  },[store.img]);
+  const nextStore = (sName:string,sImgs:string,sAddress:string)=>{
     //仮
     setStore({
       name:sName,
-      imgs:sImgs,
+      img:sImgs,
       address:sAddress
-    })
-    document.getElementById('show-img')?.setAttribute("src",store.imgs[0]);
-    imgIndex = 0;
+    });
+    
+      
   }
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
@@ -55,10 +56,11 @@ export default function Main() {
           <div className='object-cover block h-full w-[20px] bg-[#ffc7b7] rounded-md absolute z-10 left-[90%]'></div>
           <div className='object-cover block h-full w-[20px] bg-[#fe9477] rounded-md absolute z-10 left-[88%]'></div>
           <img
-            src="https://crea.ismcdn.jp/mwimgs/9/3/1200wm/img_93abdd5347237682a14cf050f2e2a6bd74395.jpg"
+            src={store.img}
             alt='店舗画像'
             className='object-cover w-[90%] h-full absolute z-10 rounded-md'
             id="show-img"
+            loading="lazy"
           />
           
         </div>
@@ -76,11 +78,7 @@ export default function Main() {
             <button className="flex"
               onClick={()=>nextStore(
                 "ECCラーメン",
-                [
-                  "https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg",
-                  "https://prtimes.jp/i/30283/28/ogp/d30283-28-979529-0.jpg",
-                  "https://static.retrip.jp/article/112117/images/11211742e8e32e-a5dd-482f-bd13-229e03835115_l.jpg"
-                ],
+                "https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg",
                 "東京"
               )}
             >
@@ -93,11 +91,7 @@ export default function Main() {
             <button className="flex" 
               onClick={()=>nextStore(
                 "ECC焼肉",
-                [
-                  "https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg",
-                  "https://prtimes.jp/i/30283/28/ogp/d30283-28-979529-0.jpg",
-                  "https://static.retrip.jp/article/112117/images/11211742e8e32e-a5dd-482f-bd13-229e03835115_l.jpg"
-                ],
+                "https://nikuzou.jp/blog/wp-content/uploads/2021/07/unnamed-1.jpg",
                 "梅田"
               )}
             >
