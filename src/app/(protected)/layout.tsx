@@ -1,6 +1,6 @@
-import BottomNav from "../components/BottomNav";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Session, getServerSession } from "next-auth";
+import BottomNav from '../components/BottomNav';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { Session, getServerSession } from 'next-auth';
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const session: Session | null = await getServerSession(authOptions);

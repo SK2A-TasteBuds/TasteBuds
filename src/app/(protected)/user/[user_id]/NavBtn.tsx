@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 function NavBtn({ user_id }: { user_id: string }) {
   const pathname = usePathname();
@@ -9,7 +9,7 @@ function NavBtn({ user_id }: { user_id: string }) {
       <Link
         href={`/user/${user_id}/keeps`}
         className={` border-b-4 px-3 py-1.5  text-base text-center font-semibold  w-1/2 ${
-          pathname === `/user/${user_id}/keeps` ? "border-orange-400" : "border-none "
+          pathname === `/user/${user_id}/keeps` ? 'border-orange-400' : 'border-none '
         }  `}
       >
         <div className='flex items-center justify-center gap-2'>
@@ -34,7 +34,7 @@ function NavBtn({ user_id }: { user_id: string }) {
       <Link
         href={`/user/${user_id}/likes`}
         className={` border-b-4 px-3 py-1.5  text-base text-center font-semibold  w-1/2  ${
-          pathname === `/user/${user_id}/likes` ? "border-orange-400" : "border-none"
+          pathname === `/user/${user_id}/likes` ? 'border-orange-400' : 'border-none'
         }  `}
       >
         <div className='flex items-center justify-center gap-2'>

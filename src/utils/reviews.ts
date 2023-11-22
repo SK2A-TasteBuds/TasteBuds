@@ -1,9 +1,9 @@
-import { collection, query, where, getDocs, doc, setDoc, DocumentData } from "firebase/firestore";
-import { db } from "@/firebase/configs";
-import { reviewData } from "@/types/types";
+import { collection, query, where, getDocs, doc, setDoc, DocumentData } from 'firebase/firestore';
+import { db } from '@/firebase/configs';
+import { reviewData } from '@/types/types';
 
 export const getReviews = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, "stores", store_id, "reviews"));
+  const q = query(collection(db, 'stores', store_id, 'reviews'));
   const reviewsData: DocumentData[] = [];
 
   try {
@@ -16,13 +16,13 @@ export const getReviews = async (store_id: string): Promise<DocumentData[]> => {
 
     return reviewsData;
   } catch (error) {
-    console.error("Error getting reviews:", error);
+    console.error('Error getting reviews:', error);
     throw error;
   }
 };
 
 export const getReviewsWithNoImages = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, "stores", store_id, "reviews"), where("image", "==", ""));
+  const q = query(collection(db, 'stores', store_id, 'reviews'), where('image', '==', ''));
 
   const reviewsData: DocumentData[] = [];
 
@@ -35,13 +35,13 @@ export const getReviewsWithNoImages = async (store_id: string): Promise<Document
 
     return reviewsData;
   } catch (error) {
-    console.error("Error getting reviews with images:", error);
+    console.error('Error getting reviews with images:', error);
     throw error;
   }
 };
 
 export const getReviewsWithImages = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, "stores", store_id, "reviews"), where("image", "!=", ""));
+  const q = query(collection(db, 'stores', store_id, 'reviews'), where('image', '!=', ''));
 
   const reviewsData: DocumentData[] = [];
 
@@ -54,14 +54,14 @@ export const getReviewsWithImages = async (store_id: string): Promise<DocumentDa
 
     return reviewsData;
   } catch (error) {
-    console.error("Error getting reviews with images:", error);
+    console.error('Error getting reviews with images:', error);
     throw error;
   }
 };
 
 //レビュー投稿
 export const postReview = async (reviewData: reviewData, store_id: string) => {
-  const reviewsCollectionRef = collection(db, "stores", store_id, "reviews");
+  const reviewsCollectionRef = collection(db, 'stores', store_id, 'reviews');
 
   try {
     // Generate a new review ID
@@ -70,10 +70,10 @@ export const postReview = async (reviewData: reviewData, store_id: string) => {
     // Add the new review to the reviews collection
     await setDoc(newReviewDocRef, reviewData);
 
-    console.log("Review added successfully:", newReviewDocRef.id);
+    console.log('Review added successfully:', newReviewDocRef.id);
     return newReviewDocRef.id;
   } catch (error) {
-    console.error("Error adding review:", error);
+    console.error('Error adding review:', error);
     throw error;
   }
 };
