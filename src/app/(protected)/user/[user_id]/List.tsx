@@ -1,48 +1,53 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 function ListItem(props: any) {
   const { id, photo, desc, name } = props;
 
   return (
-    <div className=" max-w-xs rounded-xl overflow-hidden shadow-sm border  ">
+    <div className='max-w-sm  md:max-w-lg rounded-xl overflow-hidden shadow-sm border mx-1 my-1 '>
       <Link href={`/stores/${id}`}>
         <Image
-          className="w-full lg:h-80"
+          className=' w-full h-36 md:h-64'
           width={320}
           height={320}
           src={photo}
-          alt="Store pciture"
+          alt='Store pciture'
         />
       </Link>
-      <div className="py-2 ">
-        <div className="font-extrabold text-xs text-center truncate my-1">
-          {name}
-        </div>
+      <div className='py-2 max-w-[220px] mx-auto'>
+        <div className='font-extrabold text-sm text-center truncate ... my-1'>{name}</div>
       </div>
 
-      <div className="flex items-center justify-center">
-        <div className="rounded-full">
+      <div className='flex items-center justify-around p-2'>
+        <div className='rounded-full'>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-8 h-8  bg-slate-400 rounded-full"
+            width='27'
+            height='24'
+            viewBox='0 0 27 24'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-8 w-8 bg-zinc-400 rounded-full'
           >
             <path
-              fillRule="evenodd"
-              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-              clipRule="evenodd"
+              d='M4.9998 10.1111L4.61679 10.445L4.23376 10.1111L4.61679 9.77715L4.9998 10.1111ZM22.8748 17.6666C22.8748 17.9274 22.6322 18.1388 22.3331 18.1388C22.034 18.1388 21.7915 17.9274 21.7915 17.6666L22.8748 17.6666ZM10.0335 15.1672L4.61679 10.445L5.38281 9.77715L10.7995 14.4993L10.0335 15.1672ZM4.61679 9.77715L10.0335 5.05493L10.7995 5.72275L5.38281 10.445L4.61679 9.77715ZM4.9998 9.63884L15.8331 9.63884L15.8331 10.5833L4.9998 10.5833L4.9998 9.63884ZM22.8748 15.7777L22.8748 17.6666L21.7915 17.6666L21.7915 15.7777L22.8748 15.7777ZM15.8331 9.63884C19.7221 9.63884 22.8748 12.3873 22.8748 15.7777L21.7915 15.7777C21.7915 12.9089 19.1239 10.5833 15.8331 10.5833L15.8331 9.63884Z'
+              fill='#FFF8F8'
             />
           </svg>
         </div>
-        <div className="">
+        <div className=''>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-8 h-8 p-2 text-red-500 bg-slate-400 rounded-full"
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            className='w-8 h-8 p-1 bg-[#FE724C] rounded-full text-white'
           >
-            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+            />
           </svg>
         </div>
       </div>
@@ -52,8 +57,8 @@ function ListItem(props: any) {
 
 function List({ items }: { items: any }) {
   return (
-    <div className="flex items-center justify-center px-2 pb-20">
-      <div className=" grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
+    <div className='flex items-center justify-center px-2 pb-20'>
+      <div className=' grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto '>
         {items.map((item: any, index: number) => (
           <ListItem
             key={index}

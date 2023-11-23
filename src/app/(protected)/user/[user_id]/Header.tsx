@@ -1,14 +1,17 @@
-import { Session } from "next-auth";
+import { Session } from 'next-auth';
+import Image from 'next/image';
 
 function Header({ session }: { session: Session | null }) {
   const user = session?.user;
 
   return (
     <div className=' sticky top-0 '>
-      <div className='flex flex-wrap items-start justify-center p-4 md:py-8 '>
+      <div className='flex flex-wrap items-center justify-start p-4 md:py-8  mx-auto max-w-4xl w-full'>
         <div className=''>
           {/* <!-- profile image --> */}
-          <img
+          <Image
+            width={100}
+            height={100}
             className='w-20 h-20 object-cover rounded-full
                    border-2 '
             src={session?.user.image}
