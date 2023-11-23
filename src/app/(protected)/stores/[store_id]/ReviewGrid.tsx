@@ -1,12 +1,13 @@
 import Image from 'next/image';
-import { getReviewsWithImages } from '@/utils/reviews';
 import Link from 'next/link';
+import { getReviewsWithImages } from '@/utils/reviews';
 
 function ReviewGridItem(props: any) {
-  const { image, store_id } = props;
+  const { image, store_id, index } = props;
+
   return (
     <>
-      <Link href={`/stores/${store_id}/?modal=true`}>
+      <Link href={`/stores/${store_id}/reviewItem/${index}`}>
         <div className='mx-auto  max-w-sm w-full transform overflow-hidden  bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg '>
           <Image
             width={400}
@@ -24,9 +25,9 @@ function ReviewGridItem(props: any) {
 async function ReviewGrid({ store_id }: { store_id: string }) {
   // fetch data here
   const res = await getReviewsWithImages(store_id);
-  //console.log('grid', res);
+
   const reviewsList = res.map((item, index) => (
-    <ReviewGridItem key={index} {...item} store_id={store_id} />
+    <ReviewGridItem key={index} {...item} index={index} store_id={store_id} />
   ));
 
   return (
