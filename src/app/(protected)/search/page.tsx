@@ -1,6 +1,6 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import FoodCard from "./FoodCard";
+'use client';
+import React, { useState, useEffect } from 'react';
+import FoodCard from './FoodCard';
 // import dining_img from "@/assets/img/asia.svg"
 // import izakaya_img from "@/assets/img/izakaya.svg"
 // import create_img from "@/assets/img/create.svg"
@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     // APIからデータを非同期で取得する関数
     async function fetchData() {
-      const res = await fetch("http://localhost:3000/api/genre");
+      const res = await fetch('http://localhost:3000/api/genre');
       const data = await res.json();
       console.log(data);
       setItems(data);
@@ -57,11 +57,11 @@ export default function Home() {
 }
 
 async function getData() {
-  const res = await fetch("http://localhost:3000/api/genre");
+  const res = await fetch('http://localhost:3000/api/genre');
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    throw new Error('Failed to fetch data');
   }
   return res.json();
 }
