@@ -1,5 +1,7 @@
+import Forms from "./Forms";
+
 const page = () => {
-  return <div>getting started page</div>;
+  return <Forms/>
 };
 
 export default page;
