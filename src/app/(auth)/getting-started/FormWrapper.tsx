@@ -1,3 +1,4 @@
+"use client"
 import { type } from "os";
 import { ReactElement, ReactHTMLElement } from "react";
 
