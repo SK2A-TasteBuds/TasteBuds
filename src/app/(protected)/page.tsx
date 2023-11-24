@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 
 import { useGeolocation } from "@/contexts/GeolocationProvider";
 import { useSession } from "next-auth/react";
@@ -6,9 +7,11 @@ import SignOutBtn from "../components/SignOutBtn";
 import { useEffect, useState } from "react";
 
 
+
 export default function Main() {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
+
   const [data, setData] = useState(null);
   interface StoreState {
     name: string,
@@ -71,14 +74,17 @@ export default function Main() {
 
 
   }
+
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       {/* <SignOutBtn /> */}
-      <div className='store-img relative h-[75%] w-full  overflow-hidden' id="store-img">
+
+      <div className='store-img relative h-[75%] w-full  overflow-hidden' id='store-img'>
         <div className='swipe flex '>
           <div className='object-cover block h-full w-[20px] bg-[#ffc7b7] rounded-md absolute z-10 left-[90%]'></div>
           <div className='object-cover block h-full w-[20px] bg-[#fe9477] rounded-md absolute z-10 left-[88%]'></div>
           <img
+
             src={store.img}
             alt='店舗画像'
             className='object-cover w-[90%] h-full absolute z-10 rounded-md'
@@ -86,14 +92,15 @@ export default function Main() {
             loading="lazy"
           />
 
-        </div>
 
+        </div>
 
         <div className='absolute bottom-20 left-10  p-2 bg-transparent z-20'>
           <p className='bg-transparent'>{store.name}</p>
           <p className='bg-transparent'>{store.address}</p>
         </div>
       </div>
+
 
       <div className="good-bad w-full h-1/5 flex items-center mt-3">
         <div className="object-cover w-full h-full flex justify-center">
@@ -119,6 +126,7 @@ export default function Main() {
               )}
             >
               <img src="https://www.svgrepo.com/show/449597/thumbs-up.svg" alt="" className="bg-transparent object-cover w-full h-full m-auto" />
+
             </button>
           </div>
         </div>
