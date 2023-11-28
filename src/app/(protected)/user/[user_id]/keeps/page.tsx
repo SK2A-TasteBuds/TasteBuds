@@ -2,9 +2,14 @@ import List from './List';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getUserKeepStore } from '@/utils/stores';
+import { getUserReviewStore } from '@/utils/stores';
 
 async function page() {
-  const data = await getUserKeepStore('Z5FaMtK2wqNnskIcgfQPxC5nspc2');
+
+  const session: Session | null = await getServerSession(authOptions);
+  const user = session?.user; // ログインしていなければnullになる。
+  console.log(user);
+  const data = await getUserReviewStore(user.id);
 
   return (
     <>
