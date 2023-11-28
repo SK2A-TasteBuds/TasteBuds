@@ -1,4 +1,12 @@
-import { collection, query, where, getDocs, doc, setDoc, DocumentData } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+  DocumentData,
+} from 'firebase/firestore';
 import { db } from '@/firebase/configs';
 import { reviewData } from '@/types/types';
 
@@ -21,8 +29,13 @@ export const getReviews = async (store_id: string): Promise<DocumentData[]> => {
   }
 };
 
-export const getReviewsWithNoImages = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, 'stores', store_id, 'reviews'), where('image', '==', ''));
+export const getReviewsWithNoImages = async (
+  store_id: string
+): Promise<DocumentData[]> => {
+  const q = query(
+    collection(db, 'stores', store_id, 'reviews'),
+    where('image', '==', '')
+  );
 
   const reviewsData: DocumentData[] = [];
 
@@ -40,8 +53,13 @@ export const getReviewsWithNoImages = async (store_id: string): Promise<Document
   }
 };
 
-export const getReviewsWithImages = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, 'stores', store_id, 'reviews'), where('image', '!=', ''));
+export const getReviewsWithImages = async (
+  store_id: string
+): Promise<DocumentData[]> => {
+  const q = query(
+    collection(db, 'stores', store_id, 'reviews'),
+    where('image', '!=', '')
+  );
 
   const reviewsData: DocumentData[] = [];
 

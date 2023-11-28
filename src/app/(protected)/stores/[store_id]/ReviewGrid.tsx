@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { getReviewsWithImages } from '@/utils/reviews';
 
 function ReviewGridItem(props: any) {
-  const { image, store_id, index } = props;
+  const { image, store_id, reviewId } = props;
 
   return (
     <>
-      <Link href={`/stores/${store_id}/reviewItem/${index}`}>
+      <Link href={`/stores/${store_id}/reviewItem/${reviewId}`}>
         <div className="mx-auto  max-w-sm w-full transform overflow-hidden  bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg ">
           <Image
             width={400}
