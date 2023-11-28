@@ -1,7 +1,10 @@
-import { Store } from "@/types/types";
-import { NextResponse } from "next/server";
+import { Store } from '@/types/types';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { store_id: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { store_id: string } }
+) {
   const id = params.store_id; //
 
   const res = await fetch(

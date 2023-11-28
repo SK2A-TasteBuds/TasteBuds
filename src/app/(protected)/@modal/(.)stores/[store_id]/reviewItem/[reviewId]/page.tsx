@@ -4,13 +4,13 @@ import Modal from '@/app/components/modal/Modal';
 export default function PhotoPage({
   params,
 }: {
-  params: { reviewId: string };
+  params: { store_id: string; reviewId: string };
 }) {
-  const { reviewId } = params;
-  console.log('@modal', reviewId);
+  const { store_id, reviewId } = params;
+  console.log('@modal', store_id, reviewId);
   return (
     <Modal>
-      <Frame />
+      <Frame reviewId={reviewId} store_id={store_id} />
     </Modal>
   );
 }
