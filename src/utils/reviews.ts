@@ -77,6 +77,27 @@ export const getReviewsWithImages = async (
   }
 };
 
+export const getReviewFromId = async (store_id: string, reviewId: string) => {
+  try {
+    const reviewsCollection = collection(db, 'stores', store_id, 'reviews');
+
+    const querySnapshot = await getDocs(
+      query(reviewsCollection, where('reviewId', '==', reviewId))
+    );
+
+    if (querySnapshot.empty) {
+      console.log('null');
+      return null; // No matching documents
+    }
+
+    const reviewData = querySnapshot.docs[0].data();
+    return reviewData;
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    throw error;
+  }
+};
+
 //レビュー投稿
 export const postReview = async (reviewData: reviewData, store_id: string) => {
   const reviewsCollectionRef = collection(db, 'stores', store_id, 'reviews');

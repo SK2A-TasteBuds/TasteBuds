@@ -1,19 +1,11 @@
-import {
-  collectionGroup,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import { Store } from "@/types/types";
-import { NextResponse } from "next/server";
+import { Store } from '@/types/types';
+import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  console.log("Location API was HIT !");
+  console.log('Location API was HIT !');
   const { searchParams } = new URL(request.url);
-  const lng = searchParams.get("lng");
-  const lat = searchParams.get("lat");
+  const lng = searchParams.get('lng');
+  const lat = searchParams.get('lat');
 
   const res = await fetch(
     `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&lat=${lat}&lng=${lng}&range=3&order=4&format=json`

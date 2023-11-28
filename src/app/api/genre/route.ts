@@ -14,7 +14,6 @@ export async function GET() {
   );
 
   images.push(...imagePaths); // Spread the array into the images array
-  console.log(images);
   const result: any[] = [];
   const res = await fetch(
     'https://webservice.recruit.co.jp/hotpepper/genre/v1/?key=ed7fda0f1bf044c0&format=json'
