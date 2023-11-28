@@ -40,7 +40,8 @@ type Coords = {
 interface reviewData {
   comment: string;
   create_at: Timestamp;
-  images: string[];
+  images: string | null;
   user_id: string;
   user_name: string;
+  user_img: string;
 }
