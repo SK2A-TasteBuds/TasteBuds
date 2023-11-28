@@ -25,11 +25,13 @@ export default function Main() {
   })
   //storeに入っているdataの要素番号
   const [showIndex,setIndex] = useState<number>(0);
+  const [start,setStart] = useState<number>(1);
   useEffect(() => {
     if (location) {
-      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}`)
+      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setData(data);
           setStore({
             name:data["data"][showIndex]["name"],
@@ -42,7 +44,7 @@ export default function Main() {
           console.error("Error fetching data:", error);
         });
     }
-  }, [location]);
+  }, [location,start]);
 
   // const [index,setIndex] = useState(0);
   //let imgIndex = 0;
@@ -75,7 +77,11 @@ export default function Main() {
       address: data["data"][showIndex]["address"]
     });
     console.log("after" + showIndex);
-  },[showIndex])
+  },[showIndex]);
+
+  useEffect(()=>{
+    console.log("setData");
+  },[data])
   const nextStore = (i:number) => {
     //dataがないときは処理しない
     if(!data)return;
@@ -84,9 +90,16 @@ export default function Main() {
     setIndex(i);
     console.log(showIndex + "datas" + Object.keys(data["data"]).length);
     
-    if(showIndex >= Object.keys(data["data"]).length-1){setIndex(0);}
+    if(showIndex >= Object.keys(data["data"]).length-1){
+      setIndex(0);
+      //データを初期化
+      setData(null);
+      setStart(start+10);
+    }
     
   }
+
+  
   
 
   return (
