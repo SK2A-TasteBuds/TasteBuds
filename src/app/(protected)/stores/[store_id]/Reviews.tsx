@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { getReviewsWithNoImages, getReviews } from '@/utils/reviews';
+import { getReviewsWithNoImages } from '@/utils/reviews';
 
 function ReviewItem(props: any) {
   //console.log(props);
-  const { user_name, create_at, comment, user_img, like } = props;
+  const { user_name, created_at, comment, user_img, like } = props;
   return (
     <div className="p-2 text-base rounded-lg max-w-md md:max-w-2xl w-full">
       <div className="flex justify-between items-center mb-2">
@@ -50,10 +50,10 @@ function ReviewItem(props: any) {
       <p className="text-gray-500 ">{comment}</p>
       <p className="text-xs text-zinc-400 flex justify-end">
         <time
-          dateTime={create_at.toDate().toISOString()}
-          title={create_at.toDate().toString()}
+          dateTime={created_at.toDate().toISOString()}
+          title={created_at.toDate().toString()}
         >
-          {create_at.toDate().toLocaleDateString('en-US', {
+          {created_at.toDate().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
