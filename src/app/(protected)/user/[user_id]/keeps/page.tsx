@@ -5,11 +5,10 @@ import { getUserKeepStore } from '@/utils/stores';
 import { getUserReviewStore } from '@/utils/stores';
 
 async function page() {
-
   const session: Session | null = await getServerSession(authOptions);
   const user = session?.user; // ログインしていなければnullになる。
   console.log(user);
-  const data = await getUserReviewStore(user.id);
+  const data = await getUserKeepStore(user.id);
 
   return (
     <>

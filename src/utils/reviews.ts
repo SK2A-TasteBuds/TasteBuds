@@ -7,27 +7,10 @@ import {
   setDoc,
   DocumentData,
 } from 'firebase/firestore';
-import { db } from '@/firebase/configs';
+import { db, storage } from '@/firebase/configs';
 import { reviewData } from '@/types/types';
-
-export const getReviews = async (store_id: string): Promise<DocumentData[]> => {
-  const q = query(collection(db, 'stores', store_id, 'reviews'));
-  const reviewsData: DocumentData[] = [];
-
-  try {
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      reviewsData.push(doc.data());
-    });
-
-    return reviewsData;
-  } catch (error) {
-    console.error('Error getting reviews:', error);
-    throw error;
-  }
-};
+import { Timestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const getReviewsWithNoImages = async (
   store_id: string
@@ -99,15 +82,38 @@ export const getReviewFromId = async (store_id: string, reviewId: string) => {
 };
 
 //レビュー投稿
-export const postReview = async (reviewData: reviewData, store_id: string) => {
-  const reviewsCollectionRef = collection(db, 'stores', store_id, 'reviews');
-
+export const postReview = async (
+  reviewData: reviewData,
+  store_id: string,
+  imageFile: File | null
+) => {
   try {
-    // Generate a new review ID
-    const newReviewDocRef = doc(reviewsCollectionRef);
+    const storageRef = ref(
+      storage,
+      `review_images/${store_id}/${new Date().toISOString()}`
+    );
+
+    let imageUrl = '';
+
+    if (imageFile) {
+      // Upload the image to Firebase Storage
+      await uploadBytes(storageRef, imageFile);
+      imageUrl = await getDownloadURL(storageRef);
+    }
 
     // Add the new review to the reviews collection
-    await setDoc(newReviewDocRef, reviewData);
+    const reviewsCollectionRef = collection(db, 'stores', store_id, 'reviews');
+    const newReviewDocRef = doc(reviewsCollectionRef);
+
+    // Add the review ID and created_at field to reviewData
+    const reviewWithTimestamp = {
+      ...reviewData,
+      image: imageUrl,
+      reviewId: newReviewDocRef.id,
+      created_at: Timestamp.now(),
+    };
+
+    await setDoc(newReviewDocRef, reviewWithTimestamp);
 
     console.log('Review added successfully:', newReviewDocRef.id);
     return newReviewDocRef.id;
