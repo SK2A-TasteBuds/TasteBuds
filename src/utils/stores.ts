@@ -5,10 +5,10 @@ import {
   getDocs,
   doc,
   getDoc,
-} from "firebase/firestore";
-import { db } from "@/firebase/configs";
-import { Coords, Store } from "@/types/types";
-import { getUserKeeps, getUserReviewStoreId } from "@/utils/user";
+} from 'firebase/firestore';
+import { db } from '@/firebase/configs';
+import { Coords, Store } from '@/types/types';
+import { getUserKeeps, getUserReviewStoreId } from '@/utils/user';
 
 //位置情報から店舗情報
 export const getStores = async ({ lng, lat }: Coords) => {
@@ -49,7 +49,7 @@ export const getUserKeepStore = async (user_id: string) => {
 
     return result;
   } catch (error) {
-    console.error("Error fetching user keeps or store data:", error);
+    console.error('Error fetching user keeps or store data:', error);
     throw error; // Rethrow the error to propagate it to the caller
   }
 };
@@ -75,7 +75,7 @@ export const getUserReviewStore = async (user_id: string) => {
 
     return result;
   } catch (error) {
-    console.error("Error fetching user keeps or store data:", error);
+    console.error('Error fetching user keeps or store data:', error);
     throw error; // Rethrow the error to propagate it to the caller
   }
 };
