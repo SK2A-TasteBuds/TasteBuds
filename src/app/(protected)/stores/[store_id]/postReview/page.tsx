@@ -1,86 +1,75 @@
 'use client';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { postReview } from '@/utils/reviews';
+import { reviewData } from '@/types/types';
+import { useRouter } from 'next/navigation';
 
 export function Page({ params }: { params: { store_id: string } }) {
+  const router = useRouter();
   const { store_id } = params;
+  const { data } = useSession();
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a file input ref
 
-  console.log(store_id);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [reviewContent, setReviewContent] = useState<string>('');
-  const [isLikeActive, setIsLikeActive] = useState(false);
-  const [isDislikeActive, setIsDislikeActive] = useState(false);
-
-  const [store_name, set_store_setName] = useState('');
+  const [toggleLike, setToggleLike] = useState<string>('like'); //btn toggle
+  const [likeData, setLikeData] = useState<boolean>(true); // data toggle
+  const [store_name, setstoreName] = useState<string>('');
 
   fetch(`/api/stores/${store_id}`)
     .then((response) => response.json())
     .then((data) => {
-      // JSONデータから'name'プロパティを取得
-      const name = data.name;
-      // 取得した'name'をコンソールに出力
-      console.log(name);
-      set_store_setName(name); // ステートを直接更新
+      const name = data.name; // JSONデータから'name'プロパティを取得
+      setstoreName(name); // ステートを直接更新
     })
     .catch((error) => console.error(error));
+
+  const handleLikeButtonClick = () => {
+    setToggleLike('like');
+    setLikeData(true);
+  };
+
+  const handleDislikeButtonClick = () => {
+    setToggleLike('dislike');
+    setLikeData(false);
+  };
 
   const onFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const fileObject = e.target.files[0];
+    // You can handle the file input change if needed
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log('submit');
+    const user_name = data?.user.name;
+    const user_image = data?.user.image;
+    const user_id = data?.user.id;
+    const like = likeData;
+    const image = '';
+    const comment = reviewContent;
+    const imageFile = fileInputRef.current?.files?.[0] || null; // Access the file input ref to get the selected file
+
+    const reviewData: reviewData = {
+      user_name: user_name || '',
+      user_img: user_image || '',
+      user_id: user_id || '',
+      like: like,
+      image: '', // Empty string for now, get the URL after uploading
+      comment: comment || '',
+    };
+
+    console.log(reviewData);
 
     try {
-      const imageUrl = window.URL.createObjectURL(fileObject);
-      setProfileImage(imageUrl);
+      const reviewId = await postReview(reviewData, store_id, imageFile);
+      console.log('Review ID:', reviewId);
+      router.push(`/stores/${store_id}`);
     } catch (error) {
-      console.error('Error uploading file:', error);
+      // Handle error
     }
-  };
-
-  const handleLikeButtonClick = () => {
-    setIsLikeActive(!isLikeActive);
-    setIsDislikeActive(false); // dislike ボタンの状態をリセット
-  };
-
-  const handleDislikeButtonClick = () => {
-    setIsDislikeActive(!isDislikeActive);
-    setIsLikeActive(false); // like ボタンの状態をリセット
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    // レビューの内容や写真などを配列に追加
-    const reviewData: (string | File)[] = [
-      isLikeActive ? 'like' : 'dislike',
-      reviewContent,
-      profileImage || '', // 画像がない場合は空文字列を設定
-    ];
-
-    // 配列の内容を次のページに送信する処理を追加
-    // ここで何かしらの処理を行う（例: ページ遷移など）
-
-    //ここでフェッチ
-    // stores/store_id/に送る？
-    fetch(`stores/${store_id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reviewData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-
-    // 送信後にフォームの状態をリセット
-    setIsLikeActive(false);
-    setIsDislikeActive(false);
-    setReviewContent('');
-    setProfileImage(null);
   };
 
   return (
@@ -91,43 +80,44 @@ export function Page({ params }: { params: { store_id: string } }) {
           width={120}
           height={120}
           className="mr-2 w-6 h-6 rounded-full"
-          src=""
-          alt="{user_name}"
+          src={data?.user.image}
+          alt="User Image"
         />
-        user_name
+        {data?.user.name}
       </p>
-      <div className="flex max-w-3xl w-full py-2">
-        <button
-          className={`w-1/2  border-b-4 ${
-            isLikeActive ? 'border-orange-400' : 'border-none'
-          } `}
-          onClick={handleLikeButtonClick}
-        >
-          like
-        </button>
-        <button
-          className={`w-1/2  border-b-4 ${
-            isDislikeActive ? 'border-orange-400' : 'border-none'
-          }`}
-          onClick={handleDislikeButtonClick}
-        >
-          dislike
-        </button>
-      </div>
-      <div>Review</div>
-      <MyTextareaComponent
-        value={reviewContent}
-        onChange={(e) => setReviewContent(e.target.value)}
-      />
-      <div className="flex flex-col items-start justify-start py-2">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onFileInputChange}
-          className=""
-        />
-      </div>
       <form onSubmit={handleSubmit}>
+        <div className="flex max-w-3xl w-full py-2">
+          <button
+            className={`w-1/2  border-b-4 ${
+              toggleLike === 'like' ? 'border-orange-400' : 'border-none'
+            } `}
+            onClick={handleLikeButtonClick}
+          >
+            like
+          </button>
+          <button
+            className={`w-1/2  border-b-4 ${
+              toggleLike === 'dislike' ? 'border-orange-400' : 'border-none'
+            }`}
+            onClick={handleDislikeButtonClick}
+          >
+            dislike
+          </button>
+        </div>
+        <div>Review</div>
+        <MyTextareaComponent
+          value={reviewContent}
+          onChange={(e) => setReviewContent(e.target.value)}
+        />
+        <div className="flex flex-col items-start justify-start py-2">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileInputChange}
+            ref={fileInputRef}
+            className=""
+          />
+        </div>
         <div className="text-center">
           <button
             type="submit"
