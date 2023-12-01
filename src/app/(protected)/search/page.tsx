@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
 
-// 画像のパス定義
 
 export default function Home() {
   // 食品ジャンルのデータを格納するための状態
@@ -22,11 +21,12 @@ export default function Home() {
   }, []); // 空の依存配列で効果はコンポーネントのマウント時にのみ実行されます
 
   // コンポーネントのUI部分
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <div className="grid grid-cols-2 gap-4 p-2 pb-20">
-        {foodItems.map((name, index) => (
-          <FoodCard key={index} name={name} />
+        {foodItems.map((item: any, index) => (
+          <FoodCard key={index} name={item.name} imgUrl={item.imgUrl} genre_code={item.genre_code}/>
         ))}
       </div>
     </div>

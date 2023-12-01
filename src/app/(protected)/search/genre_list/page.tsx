@@ -3,17 +3,14 @@
 
 import { useGeolocation } from "@/contexts/GeolocationProvider";
 import { useSession } from "next-auth/react";
-import SignOutBtn from "../components/SignOutBtn";
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
 
 
 
-
-export default function Main(request: Request) {
+export default function PageList() {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  const genre = request.searchParams["genre_code"];
+
   const [data, setData] = useState(null);
   interface StoreState {
     name: string,
@@ -30,7 +27,7 @@ export default function Main(request: Request) {
   const [start,setStart] = useState<number>(1);
   useEffect(() => {
     if (location) {
-      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}&genre=${genre||null}`)
+      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -100,11 +97,8 @@ export default function Main(request: Request) {
     }
     
   }
+
   
-
-  const router = useRouter();
-  const [filteredData, setFilteredData] = useState(null); // フィルタリングされたデータ用の状態
-
   
 
   return (
