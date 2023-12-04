@@ -8,10 +8,12 @@ export async function GET(request: Request) {
   const lng = searchParams.get("lng");
   const lat = searchParams.get("lat");
   const start = searchParams.get("start");
+  const genre = searchParams.get("genre");
+
 
 
   const res = await fetch(
-    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&lat=${lat}&lng=${lng}&start=${start}&range=3&order=4&format=json`
+    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=ed7fda0f1bf044c0&lat=${lat}&lng=${lng}&start=${start}&genre=${genre}&range=3&order=4&format=json`
   );
   const data = await res.json();
   const filteredData = data.results.shop //if data.results.shop map else empty arr

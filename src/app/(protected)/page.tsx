@@ -8,10 +8,12 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 
-export default function Main() {
+
+
+export default function Main(request: Request) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-
+  const genre = request.searchParams["genre_code"];
   const [data, setData] = useState(null);
   interface StoreState {
     name: string;
@@ -28,9 +30,9 @@ export default function Main() {
   const [start, setStart] = useState<number>(1);
   useEffect(() => {
     if (location) {
-      fetch(
-        `/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}`
-      )
+
+      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}&genre=${genre||null}`)
+
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -98,7 +100,16 @@ export default function Main() {
       setData(null);
       setStart(start + 10);
     }
-  };
+
+    
+  }
+  
+
+  const router = useRouter();
+  const [filteredData, setFilteredData] = useState(null); // フィルタリングされたデータ用の状態
+
+  
+
 
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">

@@ -29,7 +29,9 @@ interface Store {
 }
 
 type Genre = {
+  genre_code: string;
   name: string;
+  imgUrl: string;
 };
 
 type Coords = {
