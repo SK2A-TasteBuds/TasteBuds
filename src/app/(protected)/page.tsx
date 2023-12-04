@@ -8,12 +8,11 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 
-
-
-export default function Main(request: Request) {
+export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  const genre = request.searchParams["genre_code"];
+  const genre = request.searchParams['genre_code'];
+  console.log(genre);
   const [data, setData] = useState(null);
   interface StoreState {
     name: string;
@@ -28,11 +27,14 @@ export default function Main(request: Request) {
   //storeに入っているdataの要素番号
   const [showIndex, setIndex] = useState<number>(0);
   const [start, setStart] = useState<number>(1);
+  let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
+
+  if (genre) {
+    url += `&genre=${genre}`;
+  }
   useEffect(() => {
     if (location) {
-
-      fetch(`/api/stores?lat=${location.lat}&lng=${location.lng}&start=${start}&genre=${genre||null}`)
-
+      fetch(url)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -100,16 +102,9 @@ export default function Main(request: Request) {
       setData(null);
       setStart(start + 10);
     }
+  };
 
-    
-  }
-  
-
-  const router = useRouter();
   const [filteredData, setFilteredData] = useState(null); // フィルタリングされたデータ用の状態
-
-  
-
 
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">

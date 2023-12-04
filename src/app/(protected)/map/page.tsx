@@ -1,25 +1,23 @@
-'use client'
+'use client';
 
-import { useGeolocation } from "@/contexts/GeolocationProvider";
-import { useEffect, useState,useRef } from "react";
-import mapboxgl from "mapbox-gl";
+import { useGeolocation } from '@/contexts/GeolocationProvider';
+import { useEffect, useState, useRef } from 'react';
+import mapboxgl from 'mapbox-gl';
 
 function Map() {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;
   const { location, error } = useGeolocation();
-  const mapContainer = useRef<HTMLDivElement | null >(null);
+  const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
   const [zoom, setZoom] = useState(8);
-  const [LoadedLocation,setLoadedLocation] = useState(false); //最初のlat lng取得した判定
-
-  
+  const [LoadedLocation, setLoadedLocation] = useState(false); //最初のlat lng取得した判定
 
   useEffect(() => {
     // Get user's current lng lat
     if (!navigator.geolocation) {
-      console.log("Geolocation is not supported by your browser");
+      console.log('Geolocation is not supported by your browser');
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -28,39 +26,32 @@ function Map() {
             container: mapContainer.current!,
             style: 'mapbox://styles/mapbox/light-v11',
             center: [longitude, latitude],
-            zoom: zoom
+            zoom: zoom,
           });
           //テスト用
-          if(map.current){
-            map.current.on('move',()=>{
+          if (map.current) {
+            map.current.on('move', () => {
               setLng(map.current?.getCenter().lng as number);
               setLat(map.current?.getCenter().lat as number);
               setZoom(map.current?.getZoom() as number);
-            })
+            });
           }
         },
         (error) => {
-          console.log("Error retrieving location:", error.message);
+          console.log('Error retrieving location:', error.message);
         }
       );
-      
-    
     }
   }, [location]); // Empty dependency array ensures this effect runs only once
-  
-  
- 
-  
-  
+
   return (
     <div className="h-screen">
       {/* <div>
         {lat} {lng} {zoom}
       </div> */}
-      <div ref={mapContainer} className=" object-cover h-full" />    
+      <div ref={mapContainer} className=" object-cover h-full" />
     </div>
-      
-    );
+  );
 }
 
 export default Map;
