@@ -7,15 +7,13 @@ import SignOutBtn from '@/app/components/SignOutBtn';
 async function page() {
   const session: Session | null = await getServerSession(authOptions);
   const user = session?.user; // ログインしていなければnullになる。
-  console.log(user);
   const data = await getUserReviewStore(user.id);
-  
 
   return (
     <>
       <h1>Likes page</h1>
       <List items={data} />
-      <SignOutBtn/>
+      <SignOutBtn />
     </>
   );
 }

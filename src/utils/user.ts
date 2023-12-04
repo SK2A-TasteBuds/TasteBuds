@@ -8,34 +8,34 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
-} from "firebase/firestore";
-import { db } from "@/firebase/configs";
+} from 'firebase/firestore';
+import { db } from '@/firebase/configs';
 
 //get user form user session id
 export const getUser = async (user_id: string) => {
   try {
-    const docRef = doc(db, "users", user_id);
+    const docRef = doc(db, 'users', user_id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.id, docSnap.data());
+      console.log('Document data:', docSnap.id, docSnap.data());
       return docSnap.data();
     } else {
       // docSnap.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
       return null;
     }
   } catch (error) {
-    console.error("Error getting user:", error);
+    console.error('Error getting user:', error);
     // You can throw the error or handle it in some other way based on your requirements
     throw error;
   }
 };
 
 export const getUserCreatedReview = async (user_id: string) => {
-  const reviewsCollectionGroup = collectionGroup(db, "reviews");
+  const reviewsCollectionGroup = collectionGroup(db, 'reviews');
 
-  const q = query(reviewsCollectionGroup, where("user_id", "==", user_id));
+  const q = query(reviewsCollectionGroup, where('user_id', '==', user_id));
 
   try {
     const querySnapshot = await getDocs(q);
@@ -46,18 +46,18 @@ export const getUserCreatedReview = async (user_id: string) => {
       //console.log("Review Data:", reviewData);
       return reviewData;
     } else {
-      console.log("No reviews found for the user with ID:", user_id);
+      console.log('No reviews found for the user with ID:', user_id);
       return null;
     }
   } catch (error) {
-    console.error("Error getting reviews:", error);
+    console.error('Error getting reviews:', error);
   }
 };
 
 export const getUserReviewStoreId = async (user_id: string) => {
-  const reviewsCollectionGroup = collectionGroup(db, "reviews");
+  const reviewsCollectionGroup = collectionGroup(db, 'reviews');
 
-  const q = query(reviewsCollectionGroup, where("user_id", "==", user_id));
+  const q = query(reviewsCollectionGroup, where('user_id', '==', user_id));
 
   try {
     const querySnapshot = await getDocs(q);
@@ -84,20 +84,24 @@ export const getUserReviewStoreId = async (user_id: string) => {
 
         storeIDs.push(storeID);
       }
+      // Convert the array to a Set to remove duplicates
+      const storeIDsSet = new Set(storeIDs);
 
-      return storeIDs;
+      // Convert the Set back to an array
+      const uniqueStoreIDs = Array.from(storeIDsSet);
+      return uniqueStoreIDs;
     } else {
-      console.log("No reviews found for the user with ID:", user_id);
+      console.log('No reviews found for the user with ID:', user_id);
       return null;
     }
   } catch (error) {
-    console.error("Error getting reviews:", error);
+    console.error('Error getting reviews:', error);
     throw error;
   }
 };
 
 export const getUserKeeps = async (user_id: string) => {
-  const docRef = doc(db, "users", user_id);
+  const docRef = doc(db, 'users', user_id);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
@@ -106,13 +110,13 @@ export const getUserKeeps = async (user_id: string) => {
     return keeps;
   } else {
     // docSnap.data() will be undefined in this case
-    console.log("No such document!");
+    console.log('No such document!');
     return null;
   }
 };
 
 export const addToKeeps = async (user_id: string, store_id: string) => {
-  const docRef = doc(db, "users", user_id);
+  const docRef = doc(db, 'users', user_id);
   try {
     const docSnap = await getDoc(docRef);
     const userData = docSnap.data();
@@ -121,20 +125,20 @@ export const addToKeeps = async (user_id: string, store_id: string) => {
       keeps: arrayUnion(keepsArray, store_id),
     });
 
-    console.log("Store added to keeps successfully!");
+    console.log('Store added to keeps successfully!');
   } catch (error) {
-    console.error("Error adding store to keeps:", error);
+    console.error('Error adding store to keeps:', error);
   }
 };
 
 export const removeFromKeeps = async (user_id: string, store_id: string) => {
-  const docRef = doc(db, "users", user_id);
+  const docRef = doc(db, 'users', user_id);
   try {
     await updateDoc(docRef, {
       keeps: arrayRemove(store_id),
     });
-    console.log("Store removed from keeps successfully!");
+    console.log('Store removed from keeps successfully!');
   } catch (error) {
-    console.error("Error removing store from keeps:", error);
+    console.error('Error removing store from keeps:', error);
   }
 };
