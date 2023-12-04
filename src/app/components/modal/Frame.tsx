@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import { getReviewFromId } from '@/utils/reviews';
-import { comment } from 'postcss';
-import { DocumentData } from 'firebase/firestore';
 
 export default async function Frame({
   store_id,
@@ -67,10 +65,10 @@ export default async function Frame({
         <p className="text-gray-500 leading-tight">{res.comment}</p>
         <p className="text-xs text-zinc-400 flex justify-end">
           <time
-            dateTime={res.create_at.toDate().toISOString()}
-            title={res.create_at.toDate().toString()}
+            dateTime={res.created_at.toDate().toISOString()}
+            title={res.created_at.toDate().toString()}
           >
-            {res.create_at.toDate().toLocaleDateString('en-US', {
+            {res.created_at.toDate().toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
