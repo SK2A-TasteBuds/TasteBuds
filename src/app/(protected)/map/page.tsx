@@ -3,8 +3,15 @@
 import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getUserKeepStore } from '@/utils/stores';
 
 function Map() {
+  // const session: Session | null = await getServerSession(authOptions);
+  // const user = session?.user; // ログインしていなければnullになる。
+  // const data = await getUserKeepStore(user.id);
+
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;
   const { location, error } = useGeolocation();
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -28,14 +35,14 @@ function Map() {
             center: [longitude, latitude],
             zoom: zoom,
           });
-          //テスト用
-          if (map.current) {
-            map.current.on('move', () => {
-              setLng(map.current?.getCenter().lng as number);
-              setLat(map.current?.getCenter().lat as number);
-              setZoom(map.current?.getZoom() as number);
-            });
-          }
+          console.log(map.current);
+          
+          
+          new mapboxgl.Marker()
+            .setLngLat([34.7042676549,35.5025718865])
+            .addTo(map.current);
+          
+          
         },
         (error) => {
           console.log('Error retrieving location:', error.message);
@@ -43,12 +50,21 @@ function Map() {
       );
     }
   }, [location]); // Empty dependency array ensures this effect runs only once
-
+  useEffect(()=>{
+    //テスト用
+    if (map.current) {
+        map.current.on('move', () => {
+          setLng(map.current?.getCenter().lng as number);
+          setLat(map.current?.getCenter().lat as number);
+          setZoom(map.current?.getZoom() as number);
+        });
+    }
+  },[map.current])
   return (
     <div className="h-screen">
-      {/* <div>
+      <div>
         {lat} {lng} {zoom}
-      </div> */}
+      </div>
       <div ref={mapContainer} className=" object-cover h-full" />
     </div>
   );
