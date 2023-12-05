@@ -1,14 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { removeFromKeeps } from '@/utils/user';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { revalidatePath } from 'next/cache';
 
-const deleteTodo = async () => {
+const handleRemoveFromKeeps = async (id: string) => {
   'use server';
-  console.log('click');
+  const session: Session | null = await getServerSession(authOptions);
+  const user_id = session?.user.id;
+  removeFromKeeps(user_id, id);
+  revalidatePath('/(protected)/user/[user_id]/keeps', 'page');
 };
 
 function ListItem(props: any) {
   const { id, photo, desc, name } = props;
-
+  const handleRemoveFromKeepswithId = handleRemoveFromKeeps.bind(null, id);
   return (
     <div className="max-w-sm  md:max-w-lg rounded-xl overflow-hidden shadow-sm border mx-1 my-1 ">
       <Link href={`/stores/${id}`}>
@@ -27,8 +34,8 @@ function ListItem(props: any) {
       </div>
 
       <div className="flex items-center justify-around p-2">
-        <form>
-          <button className="rounded-full" formAction={deleteTodo}>
+        <form action={handleRemoveFromKeepswithId}>
+          <button className="rounded-full" type="submit">
             <svg
               width="27"
               height="24"
@@ -45,21 +52,23 @@ function ListItem(props: any) {
           </button>
         </form>
         <form action="">
-          <button className="rounded-full" formAction={deleteTodo}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8 p-1 bg-[#FE724C] rounded-full text-white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-              />
-            </svg>
+          <button className="rounded-full">
+            <Link href={`/stores/${id}/postReview`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-8 h-8 p-1 bg-[#FE724C] rounded-full text-white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                />
+              </svg>
+            </Link>
           </button>
         </form>
       </div>

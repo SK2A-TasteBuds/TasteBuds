@@ -59,7 +59,7 @@ export const getUserReviewStore = async (user_id: string) => {
     const result: Store[] = [];
     const store_ids: any = await getUserReviewStoreId(user_id);
 
-    if (store_ids.length >= 1) {
+    if (store_ids) {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = store_ids.map(async (item: string) => {
         const response = await fetch(
