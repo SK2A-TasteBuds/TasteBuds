@@ -85,9 +85,10 @@ export function Page({ params }: { params: { store_id: string } }) {
         />
         {data?.user.name}
       </p>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="flex max-w-3xl w-full py-2">
           <button
+            type="button"
             className={`w-1/2  border-b-4 ${
               toggleLike === 'like' ? 'border-orange-400' : 'border-none'
             } `}
@@ -96,6 +97,7 @@ export function Page({ params }: { params: { store_id: string } }) {
             like
           </button>
           <button
+            type="button"
             className={`w-1/2  border-b-4 ${
               toggleLike === 'dislike' ? 'border-orange-400' : 'border-none'
             }`}
@@ -122,6 +124,7 @@ export function Page({ params }: { params: { store_id: string } }) {
           <button
             type="submit"
             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            onClick={handleSubmit}
           >
             投稿する
           </button>

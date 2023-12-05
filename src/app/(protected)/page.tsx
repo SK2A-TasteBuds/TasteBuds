@@ -7,31 +7,33 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
+import { addToKeeps } from '@/utils/user';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
   const genre = request.searchParams['genre_code'];
-  console.log(genre);
+
   const [data, setData] = useState(null);
   interface StoreState {
     name: string;
     img: string;
     address: string;
+    id: string;
   }
   const [store, setStore] = useState<StoreState>({
     name: 'ECCパフェ',
     img: 'https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg',
     address: '中崎町',
+    id: 'Store_id',
   });
+
   //storeに入っているdataの要素番号
   const [showIndex, setIndex] = useState<number>(0);
   const [start, setStart] = useState<number>(1);
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
+  if (genre) url += `&genre=${genre}`;
 
-  if (genre) {
-    url += `&genre=${genre}`;
-  }
   useEffect(() => {
     if (location) {
       fetch(url)
@@ -43,6 +45,7 @@ export default function Main(request: any) {
             name: data['data'][showIndex]['name'],
             img: data['data'][showIndex]['photo'],
             address: data['data'][showIndex]['address'],
+            id: data['data'][showIndex]['id'],
           });
           console.log(data);
         })
@@ -52,9 +55,6 @@ export default function Main(request: any) {
     }
   }, [location, start]);
 
-  // const [index,setIndex] = useState(0);
-  //let imgIndex = 0;
-  //店の画像を押された時の処理：storeに次の店のデータを入れる
   useEffect(() => {
     const img = document.getElementById('store-img');
     if (!img) return;
@@ -65,13 +65,6 @@ export default function Main(request: any) {
     return () => {
       img.removeEventListener('click', test);
     };
-    //画像が複数枚の時の処理
-    // const ChangeImg = () =>{
-    //   imgIndex++;
-    //   if(imgIndex > store.imgs.length-1)imgIndex=0;
-    //   show.setAttribute("src",store.imgs[imgIndex]);
-    //   console.log(imgIndex);
-    // }
   }, [store.img]);
 
   //usestateは非同期のためuseEffectでshowIndexの値が変化したのを検知してその時にstoreの値を変更している
@@ -81,30 +74,34 @@ export default function Main(request: any) {
       name: data['data'][showIndex]['name'],
       img: data['data'][showIndex]['photo'],
       address: data['data'][showIndex]['address'],
+      id: data['data'][showIndex]['id'],
     });
-    console.log('after' + showIndex);
+    console.log('after', showIndex);
   }, [showIndex]);
 
-  useEffect(() => {
-    console.log('setData');
-  }, [data]);
   const nextStore = (i: number) => {
     //dataがないときは処理しない
     if (!data) return;
 
-    console.log('before' + showIndex);
+    console.log('before', showIndex);
     setIndex(i);
-    console.log(showIndex + 'datas' + Object.keys(data['data']).length);
+    console.log(showIndex, 'datas', Object.keys(data['data']).length);
 
     if (showIndex >= Object.keys(data['data']).length - 1) {
-      setIndex(0);
       //データを初期化
+      setIndex(0);
       setData(null);
       setStart(start + 10);
     }
   };
 
-  const [filteredData, setFilteredData] = useState(null); // フィルタリングされたデータ用の状態
+  const handleAddToKeeps = async () => {
+    console.log(session?.user.id);
+    console.log(store.id);
+    const user_id = session?.user.id;
+    const store_id = store.id;
+    addToKeeps(user_id, store_id);
+  };
 
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
@@ -150,7 +147,10 @@ export default function Main(request: any) {
         <div className="good rounded-full bg-transparent object-cover w-2/6 h-2/5 justify-center items-center flex">
           <button
             className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-red-100"
-            onClick={() => nextStore(showIndex + 1)}
+            onClick={() => {
+              nextStore(showIndex + 1);
+              handleAddToKeeps();
+            }}
           >
             <Image
               src={thumbs_up}
