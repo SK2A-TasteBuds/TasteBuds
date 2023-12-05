@@ -122,7 +122,7 @@ export const addToKeeps = async (user_id: string, store_id: string) => {
     const userData = docSnap.data();
     const keepsArray = userData?.keeps || [];
     await updateDoc(docRef, {
-      keeps: arrayUnion(keepsArray, store_id),
+      keeps: arrayUnion(...keepsArray, store_id),
     });
 
     console.log('Store added to keeps successfully!');
