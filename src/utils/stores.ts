@@ -32,7 +32,7 @@ export const getUserKeepStore = async (user_id: string) => {
   try {
     const result: Store[] = [];
     const user_keeps = await getUserKeeps(user_id);
-
+ 
     if (user_keeps.length >= 1) {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = user_keeps.map(async (item: string) => {
@@ -40,13 +40,14 @@ export const getUserKeepStore = async (user_id: string) => {
           `http://localhost:3000/api/stores/${item}`
         );
         const store = await response.json();
+        console.log(store)
         return store;
       });
-
+ 
       // Wait for all promises to resolve
       result.push(...(await Promise.all(storePromises)));
     }
-
+ 
     return result;
   } catch (error) {
     console.error('Error fetching user keeps or store data:', error);
@@ -59,7 +60,7 @@ export const getUserReviewStore = async (user_id: string) => {
     const result: Store[] = [];
     const store_ids: any = await getUserReviewStoreId(user_id);
 
-    if (store_ids.length >= 1) {
+    if (store_ids) {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = store_ids.map(async (item: string) => {
         const response = await fetch(
