@@ -142,3 +142,46 @@ export const removeFromKeeps = async (user_id: string, store_id: string) => {
     console.error('Error removing store from keeps:', error);
   }
 };
+
+export const getUserLikes = async (user_id: string) => {
+  const docRef = doc(db, 'users', user_id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const { likes } = docSnap.data();
+    //console.log(keeps);
+    return likes;
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log('No such document!');
+    return null;
+  }
+};
+
+export const addToLikes = async (user_id: string, store_id: string) => {
+  const docRef = doc(db, 'users', user_id);
+  try {
+    const docSnap = await getDoc(docRef);
+    const userData = docSnap.data();
+    const likesArray = userData?.likes || [];
+    await updateDoc(docRef, {
+      likes: arrayUnion(...likesArray, store_id),
+    });
+
+    console.log('Store added to likes successfully!');
+  } catch (error) {
+    console.error('Error adding store to keeps:', error);
+  }
+};
+
+export const removeFromLikes = async (user_id: string, store_id: string) => {
+  const docRef = doc(db, 'users', user_id);
+  try {
+    await updateDoc(docRef, {
+      likes: arrayRemove(store_id),
+    });
+    console.log('Store removed from keeps successfully!');
+  } catch (error) {
+    console.error('Error removing store from keeps:', error);
+  }
+};
