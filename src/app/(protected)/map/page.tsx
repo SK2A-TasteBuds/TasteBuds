@@ -10,8 +10,6 @@ import "./svg.css"
 
 
 import { getUserKeepStore,getUserReviewStore } from '@/utils/stores';
-import { Session, getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 function Map() {
   // ユーザーがログインしている場合、データを取得してピンを追加
@@ -84,8 +82,10 @@ function Map() {
             const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(`
                         <div>
-                          <img src=${element["photo"]} alt="store-img">
-                          ${element["name"]}
+                          <a href=/stores/${element["id"]}>
+                            <img src=${element["photo"]} alt="store-img">
+                            ${element["name"]}
+                          </a>  
                         </div>  
                       `)
             const pin = new mapboxgl.Marker({ color: KeepListColor })
@@ -102,8 +102,10 @@ function Map() {
             const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(`
                         <div>
-                          <img src=${element["photo"]} alt="store-img">
-                          ${element["name"]}
+                          <a href=/stores/${element["id"]}>
+                            <img src=${element["photo"]} alt="store-img">
+                            ${element["name"]}
+                          </a> 
                         </div>  
                       `)
             const pin = new mapboxgl.Marker({ color: LikeListColor })
