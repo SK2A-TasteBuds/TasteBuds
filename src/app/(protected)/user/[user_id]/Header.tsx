@@ -5,7 +5,7 @@ function Header({ session }: { session: Session | null }) {
   const user = session?.user;
 
   return (
-    <div className=" sticky top-0 ">
+    <div className=" sticky top-0 z-20">
       <div className="flex flex-wrap items-center justify-start p-4 md:py-8  mx-auto max-w-4xl w-full">
         <div className="">
           {/* <!-- profile image --> */}

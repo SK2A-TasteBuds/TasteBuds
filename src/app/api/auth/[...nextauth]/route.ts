@@ -1,34 +1,34 @@
-import NextAuth, { NextAuthOptions, Profile } from "next-auth";
-import { redirect } from "next/navigation";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth, { NextAuthOptions, Profile } from 'next-auth';
+import { redirect } from 'next/navigation';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 import {
   signInWithEmailAndPassword,
   signInWithCredential,
   GoogleAuthProvider,
   getAdditionalUserInfo,
-} from "firebase/auth";
-import { auth, db } from "@/firebase/configs";
+} from 'firebase/auth';
+import { auth, db } from '@/firebase/configs';
 import {
   doc,
   setDoc,
   collection,
   serverTimestamp,
   getDoc,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   pages: {},
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {},
       async authorize(credentials): Promise<any> {
         return await signInWithEmailAndPassword(
           auth,
-          (credentials as any).email || "",
-          (credentials as any).password || ""
+          (credentials as any).email || '',
+          (credentials as any).password || ''
         )
           .then((userCredential) => {
             if (userCredential.user) {
@@ -56,11 +56,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ account, profile, user }) {
       //console.log("signIN callback", user);
-      if (account?.provider === "credentials") {
+      if (account?.provider === 'credentials') {
         user.id = user.uid;
         console.log(user.id);
       }
-      if (account?.provider === "google") {
+      if (account?.provider === 'google') {
         /*
         認証に Oauth を使用している場合は db にユーザーが存在するかどうかを確認
         存在しない場合は存在しない場合はユーザー データを保存
@@ -73,23 +73,24 @@ export const authOptions: NextAuthOptions = {
         const isNewUser = getAdditionalUserInfo(userCredential)?.isNewUser;
 
         if (isNewUser) {
-          console.log("isNewUser insert to db");
+          console.log('isNewUser insert to db');
 
           // The user is new, so perform actions for new users (e.g., create a user record).
           const uid = userCredential.user.uid; // Get the UID of the new user
-          const usersColRef = collection(db, "users");
+          const usersColRef = collection(db, 'users');
           await setDoc(doc(usersColRef, uid), {
             name: profile?.name,
             email: profile?.email,
             image: profile?.picture,
             keeps: [],
+            likes: [],
             created_at: serverTimestamp(),
           });
         } else {
           // The user is an existing user, so you can perform other actions if needed.
           // For example, update their profile or log them in.
           // ...
-          console.log("not isNewUser");
+          console.log('not isNewUser');
         }
 
         // Continue with the rest of your code
