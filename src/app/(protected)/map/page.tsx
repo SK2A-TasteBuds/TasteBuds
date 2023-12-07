@@ -8,8 +8,7 @@ import mapboxgl, { MapMouseEvent, Marker } from 'mapbox-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./svg.css"
 
-
-import { getUserKeepStore,getUserReviewStore } from '@/utils/stores';
+import { getUserKeepStore, getUserReviewStore } from '@/utils/stores';
 
 function Map() {
   // ユーザーがログインしている場合、データを取得してピンを追加
@@ -72,7 +71,7 @@ function Map() {
       const getKeepList = async () => {
         return await getUserKeepStore(session.user.id)
       }
-      const getLikeList = async () =>{
+      const getLikeList = async () => {
         return await getUserReviewStore(session.user.id);
       }
       const KeepMarkers = getKeepList();
@@ -96,7 +95,7 @@ function Map() {
         });
       })
       const LikeMarkers = getLikeList();
-      LikeMarkers.then((data)=>{
+      LikeMarkers.then((data) => {
         data.forEach(element => {
           if (map.current != null) {
             const popup = new mapboxgl.Popup({ offset: 25 })
