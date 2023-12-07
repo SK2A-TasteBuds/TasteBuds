@@ -1,13 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { removeFromLikes } from '@/utils/user';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { revalidatePath } from 'next/cache';
 
-const deleteTodo = async () => {
+const handleRemoveFromLikes = async (id: string) => {
   'use server';
-  console.log('click');
+
+  const session: Session | null = await getServerSession(authOptions);
+  const user_id = session?.user.id;
+  removeFromLikes(user_id, id);
+  revalidatePath('/(protected)/user/[user_id]/likes', 'page');
 };
 
 function ListItem(props: any) {
   const { id, photo, desc, name } = props;
+
+  const handleRemoveFromLikeswithId = handleRemoveFromLikes.bind(null, id);
 
   return (
     <div className="max-w-sm  md:max-w-lg rounded-xl overflow-hidden shadow-sm border mx-1 my-1 ">
@@ -26,11 +36,10 @@ function ListItem(props: any) {
         </div>
       </div>
 
-      <div className="flex items-center justify-around p-2">
-        <form>
-          <button className="rounded-full" formAction={deleteTodo}>
+      <div className="flex items-start justify-center p-2">
+        <form action={handleRemoveFromLikeswithId}>
+          <button className="rounded-full" type="submit">
             <svg
-              width="27"
               height="24"
               viewBox="0 0 27 24"
               fill="none"
@@ -40,24 +49,6 @@ function ListItem(props: any) {
               <path
                 d="M4.9998 10.1111L4.61679 10.445L4.23376 10.1111L4.61679 9.77715L4.9998 10.1111ZM22.8748 17.6666C22.8748 17.9274 22.6322 18.1388 22.3331 18.1388C22.034 18.1388 21.7915 17.9274 21.7915 17.6666L22.8748 17.6666ZM10.0335 15.1672L4.61679 10.445L5.38281 9.77715L10.7995 14.4993L10.0335 15.1672ZM4.61679 9.77715L10.0335 5.05493L10.7995 5.72275L5.38281 10.445L4.61679 9.77715ZM4.9998 9.63884L15.8331 9.63884L15.8331 10.5833L4.9998 10.5833L4.9998 9.63884ZM22.8748 15.7777L22.8748 17.6666L21.7915 17.6666L21.7915 15.7777L22.8748 15.7777ZM15.8331 9.63884C19.7221 9.63884 22.8748 12.3873 22.8748 15.7777L21.7915 15.7777C21.7915 12.9089 19.1239 10.5833 15.8331 10.5833L15.8331 9.63884Z"
                 fill="#FFF8F8"
-              />
-            </svg>
-          </button>
-        </form>
-        <form action="">
-          <button className="rounded-full" formAction={deleteTodo}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8 p-1 bg-[#FE724C] rounded-full text-white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
               />
             </svg>
           </button>

@@ -1,0 +1,6 @@
+.mapboxgl-map svg{
+    background-color: transparent;
+}
+.mapboxgl-marker{
+    background-color: transparent;
+}

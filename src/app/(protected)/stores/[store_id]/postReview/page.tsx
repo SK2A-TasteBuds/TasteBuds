@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { postReview } from '@/utils/reviews';
+import { addToLikes, removeFromKeeps } from '@/utils/user';
 import { reviewData } from '@/types/types';
 import { useRouter } from 'next/navigation';
 
@@ -65,6 +66,8 @@ export function Page({ params }: { params: { store_id: string } }) {
 
     try {
       const reviewId = await postReview(reviewData, store_id, imageFile);
+      await addToLikes(user_id, store_id);
+      await removeFromKeeps(user_id, store_id);
       console.log('Review ID:', reviewId);
       router.push(`/stores/${store_id}`);
     } catch (error) {

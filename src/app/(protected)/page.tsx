@@ -13,6 +13,7 @@ import Card from '@/app/components/cards/Card'
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
+  console.log(session?.user);
   const genre = request.searchParams['genre_code'];
 
   const [data, setData] = useState(null);
