@@ -8,7 +8,7 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 import { addToKeeps } from '@/utils/user';
-import Card from '@/app/components/cards/Card'
+import Card from '@/app/components/cards/card';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
@@ -106,10 +106,9 @@ export default function Main(request: any) {
   };
 
   return (
-    
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
       {/* <SignOutBtn /> */}
-      <Card store={store}/>
+      <Card store={store} />
 
       <div className="good-bad w-full h-1/8 flex items-center mt-3 mx-auto">
         <div className="bad rounded-full bg-transparent object-cover  justify-center items-center flex mx-auto">
