@@ -3,12 +3,15 @@
 import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 import SignOutBtn from '../components/SignOutBtn';
-import { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 import { addToKeeps } from '@/utils/user';
 import PageMotion from '../components/PageMotion';
+import TinderCard from 'react-tinder-card';
+
+
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
@@ -49,6 +52,11 @@ export default function Main(request: any) {
             address: data['data'][showIndex]['address'],
             id: data['data'][showIndex]['id'],
           });
+          //新規データロード時もtinder-cardをもとの位置に戻す
+          const restoreCard =async () => {
+            await childRefs[showIndex].current.restoreCard();
+          }
+          restoreCard();
           console.log(data);
         })
         .catch((error) => {
@@ -79,6 +87,11 @@ export default function Main(request: any) {
       id: data['data'][showIndex]['id'],
     });
     console.log('after', showIndex);
+    //インデックスが動いたら元の場所に戻してる
+    const restoreCard =async () => {
+      await childRefs[showIndex].current.restoreCard();
+    }
+    restoreCard();
   }, [showIndex]);
 
   const nextStore = (i: number) => {
@@ -105,11 +118,35 @@ export default function Main(request: any) {
     addToKeeps(user_id, store_id);
   };
 
+  //tinder card　なんで動いているのかあまりわかりません
+
+  //ボタン押したとき
+  const onSwipe = async (direction: string) => {
+    console.log("swiped" + direction + showIndex);
+    if(direction === "right"){
+      handleAddToKeeps();
+    }
+    await childRefs[showIndex].current.swipe(direction);
+  }
+  //タッチでスワイプされたとき
+  const onSwiped = (direction:string) => {
+    if(direction === "right"){
+      handleAddToKeeps();
+    }
+  }
+
+  //これがなんかしてる
+  const childRefs = useMemo<any>(
+    () =>
+      Array(10)
+        .fill(0)
+        .map((i) => React.createRef()),
+    [10]
+  )
   return (
     <PageMotion>
       <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
         {/* <SignOutBtn /> */}
-
         <div
           className="store-img relative h-[75%] w-full  overflow-hidden"
           id="store-img"
@@ -117,15 +154,23 @@ export default function Main(request: any) {
           <div className="swipe flex ">
             <div className="object-cover block h-full w-[40px] bg-[#ffc7b7] rounded-md absolute z-10 left-[90%]"></div>
             <div className="object-cover block h-full w-[38px] bg-[#fe9477] rounded-md absolute z-10 left-[88%]"></div>
-            <Image
-              src={store.img}
-              alt="店舗画像"
-              className="w-[95%] h-full absolute z-10 rounded-md max-w-2xl"
-              id="show-img"
-              loading="lazy"
-              width={400}
-              height={400}
-            />
+            <TinderCard
+              ref={childRefs[showIndex]}
+              onSwipe={(dir)=>onSwiped(dir)}
+              onCardLeftScreen={() => nextStore(showIndex + 1)}
+              preventSwipe={['up','down']}
+              className={`object-cover w-[95%] h-full absolute z-10 rounded-md max-w-2xl `}
+            >
+              <Image
+                src={store.img}
+                alt="店舗画像"
+                className="w-full h-full absolute z-10 rounded-md max-w-2xl"
+                id="show-img"
+                loading="lazy"
+                width={400}
+                height={400}
+              />
+            </TinderCard>
           </div>
 
           <div className="absolute bottom-2 left-4  p-2 bg-transparent z-20">
@@ -137,7 +182,9 @@ export default function Main(request: any) {
           <div className="bad rounded-full bg-transparent object-cover w-2/6 h-2/5 justify-center items-center flex">
             <button
               className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-blue-100"
-              onClick={() => nextStore(showIndex + 1)}
+              onClick={() => {
+                onSwipe("left");
+              }}
             >
               <Image
                 src={thumbs_down}
@@ -151,8 +198,8 @@ export default function Main(request: any) {
             <button
               className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-red-100"
               onClick={() => {
-                nextStore(showIndex + 1);
                 handleAddToKeeps();
+                onSwipe("right");
               }}
             >
               <Image

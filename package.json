@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-spring/web": "^9.5.5",
     "firebase": "^10.5.2",
     "framer-motion": "^10.16.14",
     "mapbox-gl": "^3.0.0",
     "next": "13.5.5",
     "next-auth": "^4.24.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-tinder-card": "^1.6.4"
   },
   "devDependencies": {
     "@types/mapbox-gl": "^2.7.19",
