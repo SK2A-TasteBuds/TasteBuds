@@ -13,6 +13,7 @@ import TinderCard from 'react-tinder-card';
 
 
 
+
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
@@ -212,5 +213,6 @@ export default function Main(request: any) {
         </div>
       </div>
     </PageMotion>
+
   );
 }
