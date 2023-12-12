@@ -8,6 +8,8 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 import { addToKeeps } from '@/utils/user';
+import Header from '../components/Header';
+
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
@@ -34,6 +36,7 @@ export default function Main(request: any) {
   const [start, setStart] = useState<number>(1);
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
   if (genre) url += `&genre=${genre}`;
+
 
   useEffect(() => {
     if (location) {
@@ -105,13 +108,16 @@ export default function Main(request: any) {
   };
 
   return (
-    <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
+
+      <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
       {/* <SignOutBtn /> */}
+      {genre && <Header session={null} genreCode={genre} />}
 
       <div
         className="store-img relative h-[75%] w-full  overflow-hidden"
         id="store-img"
       >
+        
         <div className="swipe flex ">
           <div className="object-cover block h-full w-[40px] bg-[#ffc7b7] rounded-md absolute z-10 left-[90%]"></div>
           <div className="object-cover block h-full w-[38px] bg-[#fe9477] rounded-md absolute z-10 left-[88%]"></div>

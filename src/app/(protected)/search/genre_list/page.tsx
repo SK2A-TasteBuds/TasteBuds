@@ -4,7 +4,7 @@
 import { useGeolocation } from "@/contexts/GeolocationProvider";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-
+import Header from "@/app/components/Header";
 
 
 export default function PageList() {
@@ -104,6 +104,8 @@ export default function PageList() {
   return (
     <div className='main flex flex-col overflow-hidden items-center w-full h-screen'>
       {/* <SignOutBtn /> */}
+
+      {genre && <Header session={session} />}
 
       <div className='store-img relative h-[75%] w-full  overflow-hidden' id='store-img'>
         <div className='swipe flex '>

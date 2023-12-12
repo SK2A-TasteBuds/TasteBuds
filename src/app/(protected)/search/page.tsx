@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
+import Header from '@/app/components/Header';
+import { useRouter } from 'next/router';
 
 
 export default function Home() {
@@ -23,8 +25,9 @@ export default function Home() {
   // コンポーネントのUI部分
 
   return (
+    //BackButtonコンポーネントに現在のパスを渡し表示
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      <div className="grid grid-cols-2 gap-4 p-2 pb-20">
+        <div className="grid grid-cols-2 gap-4 p-2 pb-20">
         {foodItems.map((item: any, index) => (
           <FoodCard key={index} name={item.name} imgUrl={item.imgUrl} genre_code={item.genre_code}/>
         ))}
