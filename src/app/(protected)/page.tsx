@@ -2,142 +2,118 @@
 
 import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
-import SignOutBtn from '../components/SignOutBtn';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import thumbs_up from '@/assets/svg/thumbs-up.svg';
-import thumbs_down from '@/assets/svg/thumbs-down.svg';
+import { useEffect, useState, useMemo, createRef, useRef } from 'react';
 import { addToKeeps } from '@/utils/user';
 import Card from '@/app/components/cards/card';
 import { Store } from '@/types/types';
+import TinderCard from 'react-tinder-card';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  //console.log(session?.user);
   const genre = request.searchParams['genre_code'];
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<Store[] | null>(null);
+  const [store, setStore] = useState<Store | null>(null);
 
-  const [store, setStore] = useState<Store>({
-    name: 'ECCパフェ',
-    img: 'https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg',
-    address: '中崎町',
-    id: 'Store_id',
-    genre: {},
-  });
-
-  //storeに入っているdataの要素番号
   const [showIndex, setIndex] = useState<number>(0);
-  const [start, setStart] = useState<number>(1);
+  const [start, setStart] = useState<number>(1); // for fetching
+
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
   if (genre) url += `&genre=${genre}`;
 
   useEffect(() => {
-    if (location) {
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setData(data);
-          setStore({
-            name: data['data'][showIndex]['name'],
-            img: data['data'][showIndex]['photo'],
-            address: data['data'][showIndex]['address'],
-            id: data['data'][showIndex]['id'],
-            genre: data['data'][showIndex]['genre'],
-          });
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [location, start]);
+    const fetchData = async () => {
+      try {
+        if (location) {
+          const response = await fetch(url);
+          const responseData = await response.json();
 
-  useEffect(() => {
-    const img = document.getElementById('store-img');
-    if (!img) return;
-    const test = () => {
-      nextStore(showIndex + 1);
+          setData(responseData['data']);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setData([]); // Set data to an empty array or handle the error accordingly
+      }
     };
-    img.addEventListener('click', test);
-    return () => {
-      img.removeEventListener('click', test);
-    };
-  }, [store.img]);
 
-  //usestateは非同期のためuseEffectでshowIndexの値が変化したのを検知してその時にstoreの値を変更している
+    fetchData();
+  }, [location, url]);
+
   useEffect(() => {
     if (!data) return;
-    setStore({
-      name: data['data'][showIndex]['name'],
-      img: data['data'][showIndex]['photo'],
-      address: data['data'][showIndex]['address'],
-      id: data['data'][showIndex]['id'],
-      genre: data['data'][showIndex]['genre'],
-    });
-    console.log('after', showIndex);
-  }, [showIndex]);
+    setStore(data[showIndex]);
+  }, [showIndex, data]);
 
   const nextStore = (i: number) => {
-    //dataがないときは処理しない
     if (!data) return;
 
-    console.log('before', showIndex);
     setIndex(i);
-    console.log(showIndex, 'datas', Object.keys(data['data']).length);
 
-    if (showIndex >= Object.keys(data['data']).length - 1) {
-      //データを初期化
+    if (showIndex >= data.length - 1) {
       setIndex(0);
       setData(null);
       setStart(start + 10);
     }
+    console.log('index', i);
   };
-
+  console.log('data', data);
   const handleAddToKeeps = async () => {
-    console.log(session?.user.id);
-    console.log(store.id);
-    const user_id = session?.user.id;
-    const store_id = store.id;
-    addToKeeps(user_id, store_id);
+    if (session && store) {
+      console.log(session.user.id);
+      console.log(store.id);
+      const user_id = session.user.id;
+      const store_id = store.id;
+      addToKeeps(user_id, store_id);
+    }
   };
 
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      {/* <SignOutBtn /> */}
       <Card store={store} />
-
-      <div className="good-bad w-full h-1/8 flex items-center mt-3 mx-auto">
-        <div className="bad rounded-full bg-transparent object-cover  justify-center items-center flex mx-auto">
-          <button
-            className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-blue-100"
-            onClick={() => nextStore(showIndex + 1)}
+      <div className="flex items-center justify-around p-2 max-w-md w-full">
+        <button
+          className="rounded-full"
+          onClick={() => {
+            nextStore(showIndex + 1);
+          }}
+        >
+          <svg
+            width="27"
+            height="24"
+            viewBox="0 0 27 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-10 w-10  bg-zinc-400 rounded-full"
           >
-            <Image
-              src={thumbs_down}
-              alt=""
-              className="bg-transparent object-cover w-full h-full m-auto"
+            <path
+              d="M4.9998 10.1111L4.61679 10.445L4.23376 10.1111L4.61679 9.77715L4.9998 10.1111ZM22.8748 17.6666C22.8748 17.9274 22.6322 18.1388 22.3331 18.1388C22.034 18.1388 21.7915 17.9274 21.7915 17.6666L22.8748 17.6666ZM10.0335 15.1672L4.61679 10.445L5.38281 9.77715L10.7995 14.4993L10.0335 15.1672ZM4.61679 9.77715L10.0335 5.05493L10.7995 5.72275L5.38281 10.445L4.61679 9.77715ZM4.9998 9.63884L15.8331 9.63884L15.8331 10.5833L4.9998 10.5833L4.9998 9.63884ZM22.8748 15.7777L22.8748 17.6666L21.7915 17.6666L21.7915 15.7777L22.8748 15.7777ZM15.8331 9.63884C19.7221 9.63884 22.8748 12.3873 22.8748 15.7777L21.7915 15.7777C21.7915 12.9089 19.1239 10.5833 15.8331 10.5833L15.8331 9.63884Z"
+              fill="#FFF8F8"
             />
-          </button>
-        </div>
-
-        <div className="good rounded-full bg-transparent object-cover w-2/6 h-2/5 justify-center items-center flex">
-          <button
-            className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-red-100"
-            onClick={() => {
-              nextStore(showIndex + 1);
-              handleAddToKeeps();
-            }}
+          </svg>
+        </button>
+        <button
+          className="rounded-full"
+          onClick={() => {
+            nextStore(showIndex + 1);
+            handleAddToKeeps();
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-10 h-10 p-1 bg-[#FE724C] rounded-full text-white"
           >
-            <Image
-              src={thumbs_up}
-              alt=""
-              className="bg-transparent object-cover w-full h-full m-auto"
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
             />
-          </button>
-        </div>
+          </svg>
+        </button>
       </div>
     </div>
   );
