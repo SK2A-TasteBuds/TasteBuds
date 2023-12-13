@@ -3,9 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 
-//画像  名前 lg
-//store.name、sotre.img、store.id
-
 const Card = ({ store }: { store: any }) => {
   if (!store) {
     // Render loading state or alternative content
@@ -24,6 +21,7 @@ const Card = ({ store }: { store: any }) => {
           className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
           width={320}
           height={320}
+          priority
         />
 
         <div className="py-4 max-w-md w-full">
