@@ -90,7 +90,6 @@ function List({ items }: { items: any }) {
             id={item.id}
           />
         ))}
-        <Skeleton />
       </div>
     </div>
   );
