@@ -8,26 +8,23 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 import { addToKeeps } from '@/utils/user';
-import Card from '@/app/components/cards/Card'
+import Card from '@/app/components/cards/card';
+import { Store } from '@/types/types';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  console.log(session?.user);
+  //console.log(session?.user);
   const genre = request.searchParams['genre_code'];
 
   const [data, setData] = useState(null);
-  interface StoreState {
-    name: string;
-    img: string;
-    address: string;
-    id: string;
-  }
-  const [store, setStore] = useState<StoreState>({
+
+  const [store, setStore] = useState<Store>({
     name: 'ECCパフェ',
     img: 'https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg',
     address: '中崎町',
     id: 'Store_id',
+    genre: {},
   });
 
   //storeに入っているdataの要素番号
@@ -48,6 +45,7 @@ export default function Main(request: any) {
             img: data['data'][showIndex]['photo'],
             address: data['data'][showIndex]['address'],
             id: data['data'][showIndex]['id'],
+            genre: data['data'][showIndex]['genre'],
           });
           console.log(data);
         })
@@ -77,6 +75,7 @@ export default function Main(request: any) {
       img: data['data'][showIndex]['photo'],
       address: data['data'][showIndex]['address'],
       id: data['data'][showIndex]['id'],
+      genre: data['data'][showIndex]['genre'],
     });
     console.log('after', showIndex);
   }, [showIndex]);
@@ -106,10 +105,9 @@ export default function Main(request: any) {
   };
 
   return (
-    
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
       {/* <SignOutBtn /> */}
-      <Card store={store}/>
+      <Card store={store} />
 
       <div className="good-bad w-full h-1/8 flex items-center mt-3 mx-auto">
         <div className="bad rounded-full bg-transparent object-cover  justify-center items-center flex mx-auto">
