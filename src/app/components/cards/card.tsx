@@ -3,22 +3,25 @@
 import React from 'react';
 import Image from 'next/image';
 
-//画像  名前 lg
-//store.name、sotre.img、store.id
-
 const Card = ({ store }: { store: any }) => {
-  console.log(store);
-  const { address, name, img, discription, genre } = store;
+  if (!store) {
+    // Render loading state or alternative content
+    return <p>Loading...</p>;
+  }
+
+  //console.log(store);
+  const { address, name, photo, discription, genre } = store;
 
   return (
     <>
-      <div className=" max-w-md w-full  border border-gray-200 rounded-lg  store-img relative p-4 m-10  ">
+      <div className=" max-w-md w-full  border border-gray-200 rounded-lg  store-img relative p-4 m-5  ">
         <Image
-          src={img}
+          src={photo}
           alt="store_img"
           className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
           width={320}
-          height={400}
+          height={320}
+          priority
         />
 
         <div className="py-4 max-w-md w-full">
