@@ -10,8 +10,8 @@ function Header({ name }: { name: string }) {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <button className="absolute left-0" onClick={goBack}>
+    <div className="flex justify-center items-center py-2 ">
+      <button className="absolute left-2" onClick={goBack}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -27,7 +27,7 @@ function Header({ name }: { name: string }) {
           />
         </svg>
       </button>
-      <div className="text-center flex-grow">#{name}</div>
+      <div className="text-center flex-grow font-semibold">{name}</div>
     </div>
   );
 }

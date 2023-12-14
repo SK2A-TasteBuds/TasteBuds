@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
+import Header from '@/app/components/HeaderBar';
 
 export default function Home() {
   // 食品ジャンルのデータを格納するための状態
@@ -22,18 +23,21 @@ export default function Home() {
   // コンポーネントのUI部分
 
   return (
-    <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
-        {foodItems.map((item: any, index) => (
-          <FoodCard
-            key={index}
-            name={item.name}
-            imgUrl={item.imgUrl}
-            genre_code={item.genre_code}
-          />
-        ))}
+    <>
+      <Header name="Search" />
+      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
+          {foodItems.map((item: any, index) => (
+            <FoodCard
+              key={index}
+              name={item.name}
+              imgUrl={item.imgUrl}
+              genre_code={item.genre_code}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
