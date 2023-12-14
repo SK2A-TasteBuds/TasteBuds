@@ -1,6 +1,7 @@
 import BottomNav from '../components/BottomNav';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { Session, getServerSession } from 'next-auth';
+import Header from '../components/Header';
 import SignOutBtn from '../components/SignOutBtn';
 
 export default async function MainLayout(props: {
@@ -9,6 +10,7 @@ export default async function MainLayout(props: {
 }) {
   const session: Session | null = await getServerSession(authOptions);
   const user = session?.user; // ログインしていなければnullになる。
+
   return (
     <section>
       {/* Debug用 */}
@@ -24,7 +26,6 @@ export default async function MainLayout(props: {
 
       {props.children}
       {props.modal}
-
       <BottomNav session={session} />
     </section>
   );
