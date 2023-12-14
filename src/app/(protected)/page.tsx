@@ -68,10 +68,32 @@ export default function Main(request: any) {
     }
   };
 
+  //react tinder card
+  const showIndexRef = useRef(showIndex);
+
+  const childRefs = useMemo(
+    () =>
+      Array(data?.length)
+        .fill(0)
+        .map((i) => createRef()),
+    []
+  );
+
+  const onSwipe = async (direction: string) => {
+    console.log('swiped' + direction + showIndex);
+    if (direction === 'right') {
+      handleAddToKeeps();
+    }
+    await childRefs[showIndex].current.swipe(direction);
+  };
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      <Card store={store} />
-
+      <TinderCard
+        onSwipe={(dir) => onSwipe(dir)}
+        onCardLeftScreen={() => nextStore(showIndex + 1)}
+      >
+        <Card store={store} />
+      </TinderCard>
       <div className="flex items-center justify-around p-2 max-w-md w-full">
         <button
           className="rounded-full"
