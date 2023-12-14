@@ -32,8 +32,6 @@ export default function Main(request: any) {
           const responseData = await response.json();
 
           setData(responseData['data']);
-          
-           
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -51,11 +49,11 @@ export default function Main(request: any) {
   }, [showIndex]);
 
   //test
-  useEffect(()=>{
-    if(data){
+  useEffect(() => {
+    if (data) {
       console.log(data[0]);
     }
-  },[data])
+  }, [data]);
 
   //現在のdataに入っている次の店
   const nextStore = (i: number) => {
@@ -99,34 +97,67 @@ export default function Main(request: any) {
   };
 
   //タッチでスワイプされたとき
-  const onSwiped = (direction:string) => {
-    if(direction === "right"){
+  const onSwiped = (direction: string) => {
+    if (direction === 'right') {
       handleAddToKeeps();
     }
-  }
+  };
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      <div className='relative h-[75%] w-full  overflow-hidden'>
-        {data?.slice().reverse().map((character,index)=>
-          <TinderCard
-            ref={childRefs[(9-index)]}
-            key={9-index}
-            onSwipe={(dir) => onSwiped(dir)}
-            onCardLeftScreen={() => nextStore((9-index)+1 )}
-            className={`absolute z-${-index} object-cover w-full h-full`}
-          >
-            <img className={`object-cover  w-full h-full rounded-lg`} src={`${character.photo} `}  alt="" />
-            <p className='bg-transparent text-white absolute bottom-2 left-2'>{character.name}</p>
-          </TinderCard>
-        )}
+      <div className="relative max-h-96 h-full max-w-md  w-full  overflow-hidden flex justify-center ">
+        {data
+          ?.slice()
+          .reverse()
+          .map((store, index) => (
+            <TinderCard
+              ref={childRefs[9 - index]}
+              key={9 - index}
+              onSwipe={(dir) => onSwiped(dir)}
+              onCardLeftScreen={() => nextStore(9 - index + 1)}
+              className={`absolute z-${-index} object-cover w-full `}
+            >
+              <Image
+                src={store.photo}
+                alt="store_img"
+                className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
+                width={320}
+                height={320}
+                priority
+              />
+
+              <div className="py-4 max-w-md w-full">
+                <div className="flex justify-between ">
+                  <h3 className="text-xs">{store.genre.name}</h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6 fill-orange-500"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <p className="mb-2  text-xl font-bold tracking-tight text-gray-900 ">
+                  {store.name}
+                </p>
+
+                <p className="mb-3 text-xs font-normal text-gray-700 ">
+                  {store.address}
+                </p>
+              </div>
+            </TinderCard>
+          ))}
       </div>
-      
+
       <div className="flex items-center justify-around p-2 max-w-md w-full ">
         <button
           className="rounded-full"
           onClick={() => {
-            onSwipe("left");
-            nextStore(showIndex + 1);
+            onSwipe('left');
           }}
         >
           <svg
@@ -147,8 +178,7 @@ export default function Main(request: any) {
         <button
           className="rounded-full"
           onClick={() => {
-            onSwipe("right");
-            handleAddToKeeps();
+            onSwipe('right');
           }}
         >
           <svg
