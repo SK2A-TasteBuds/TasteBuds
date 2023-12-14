@@ -4,7 +4,6 @@ import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState, useMemo, createRef, useRef } from 'react';
 import { addToKeeps } from '@/utils/user';
-import Card from '@/app/components/cards/card';
 import { Store } from '@/types/types';
 import TinderCard from 'react-tinder-card';
 import React from 'react';
@@ -89,7 +88,7 @@ export default function Main(request: any) {
   );
 
   const onSwipe = async (direction: string) => {
-    console.log('swiped' + direction + showIndex);
+    console.log('swiped ' + direction, showIndex);
     if (direction === 'right') {
       handleAddToKeeps();
     }
@@ -104,7 +103,7 @@ export default function Main(request: any) {
   };
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      <div className="relative max-h-96 h-full max-w-md  w-full  overflow-hidden flex justify-center ">
+      <div className="relative max-h-96 h-full max-w-md w-full  overflow-hidden flex justify-center mt-10">
         {data
           ?.slice()
           .reverse()
