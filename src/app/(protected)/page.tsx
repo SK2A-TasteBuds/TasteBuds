@@ -7,7 +7,8 @@ import { addToKeeps } from '@/utils/user';
 import Card from '@/app/components/cards/card';
 import { Store } from '@/types/types';
 import TinderCard from 'react-tinder-card';
-
+import React from 'react';
+import Image from 'next/image';
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
@@ -22,6 +23,7 @@ export default function Main(request: any) {
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
   if (genre) url += `&genre=${genre}`;
 
+  //locationかurlが変動した時の処理
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +32,8 @@ export default function Main(request: any) {
           const responseData = await response.json();
 
           setData(responseData['data']);
+          
+           
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -40,16 +44,23 @@ export default function Main(request: any) {
     fetchData();
   }, [location, url]);
 
+  //showindexが変動した時の処理
   useEffect(() => {
     if (!data) return;
     setStore(data[showIndex]);
-  }, [showIndex, data]);
+  }, [showIndex]);
 
+  //test
+  useEffect(()=>{
+    if(data){
+      console.log(data[0]);
+    }
+  },[data])
+
+  //現在のdataに入っている次の店
   const nextStore = (i: number) => {
     if (!data) return;
-
     setIndex(i);
-
     if (showIndex >= data.length - 1) {
       setIndex(0);
       setData(null);
@@ -71,12 +82,12 @@ export default function Main(request: any) {
   //react tinder card
   const showIndexRef = useRef(showIndex);
 
-  const childRefs = useMemo(
+  const childRefs = useMemo<any>(
     () =>
       Array(data?.length)
         .fill(0)
-        .map((i) => createRef()),
-    []
+        .map((i) => React.createRef()),
+    [data?.length]
   );
 
   const onSwipe = async (direction: string) => {
@@ -86,18 +97,35 @@ export default function Main(request: any) {
     }
     await childRefs[showIndex].current.swipe(direction);
   };
+
+  //タッチでスワイプされたとき
+  const onSwiped = (direction:string) => {
+    if(direction === "right"){
+      handleAddToKeeps();
+    }
+  }
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      <TinderCard
-        onSwipe={(dir) => onSwipe(dir)}
-        onCardLeftScreen={() => nextStore(showIndex + 1)}
-      >
-        <Card store={store} />
-      </TinderCard>
-      <div className="flex items-center justify-around p-2 max-w-md w-full">
+      <div className='relative h-[75%] w-full  overflow-hidden'>
+        {data?.slice().reverse().map((character,index)=>
+          <TinderCard
+            ref={childRefs[(9-index)]}
+            key={9-index}
+            onSwipe={(dir) => onSwiped(dir)}
+            onCardLeftScreen={() => nextStore((9-index)+1 )}
+            className={`absolute z-${-index} object-cover w-full h-full`}
+          >
+            <img className={`object-cover  w-full h-full rounded-lg`} src={`${character.photo} `}  alt="" />
+            <p className='bg-transparent text-white absolute bottom-2 left-2'>{character.name}</p>
+          </TinderCard>
+        )}
+      </div>
+      
+      <div className="flex items-center justify-around p-2 max-w-md w-full ">
         <button
           className="rounded-full"
           onClick={() => {
+            onSwipe("left");
             nextStore(showIndex + 1);
           }}
         >
@@ -119,7 +147,7 @@ export default function Main(request: any) {
         <button
           className="rounded-full"
           onClick={() => {
-            nextStore(showIndex + 1);
+            onSwipe("right");
             handleAddToKeeps();
           }}
         >
