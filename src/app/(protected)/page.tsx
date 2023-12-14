@@ -8,7 +8,7 @@ import Image from 'next/image';
 import thumbs_up from '@/assets/svg/thumbs-up.svg';
 import thumbs_down from '@/assets/svg/thumbs-down.svg';
 import { addToKeeps } from '@/utils/user';
-import Card from '@/app/components/cards/Card'
+import Card from '@/app/components/cards/card'
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
