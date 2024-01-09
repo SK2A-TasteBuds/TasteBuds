@@ -47,7 +47,7 @@ function ReviewItem(props: any) {
           </div>
         </div>
       </div>
-      <p className="text-gray-500 ">{comment}</p>
+      <p className="text-gray-500 px-8">{comment}</p>
       <p className="text-xs text-zinc-400 flex justify-end">
         <time
           dateTime={created_at.toDate().toISOString()}

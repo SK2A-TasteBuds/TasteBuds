@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
-import PageMotion from '@/app/components/PageMotion';
-
+import Header from '@/app/components/HeaderBar';
 
 export default function Home() {
   // 食品ジャンルのデータを格納するための状態
@@ -24,16 +23,21 @@ export default function Home() {
   // コンポーネントのUI部分
 
   return (
-    <PageMotion>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="grid grid-cols-2 gap-4 p-2 pb-20">
+    <>
+      <Header name="Search" />
+      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
           {foodItems.map((item: any, index) => (
-            <FoodCard key={index} name={item.name} imgUrl={item.imgUrl} genre_code={item.genre_code} />
+            <FoodCard
+              key={index}
+              name={item.name}
+              imgUrl={item.imgUrl}
+              genre_code={item.genre_code}
+            />
           ))}
         </div>
-
       </div>
-    </PageMotion>
+    </>
   );
 }
 
@@ -46,16 +50,3 @@ async function getData() {
   }
   return res.json();
 }
-
-// // =======
-// <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
-// <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
-//   {foodItems.map((item: any, index) => (
-//     <FoodCard
-//       key={index}
-//       name={item.name}
-//       imgUrl={item.imgUrl}
-//       genre_code={item.genre_code}
-//     />
-//   ))}
-// >>>>>>> d4698e2658163d69ee6d116b587cff4cf5cabad4

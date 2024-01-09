@@ -4,6 +4,7 @@ import { removeFromKeeps } from '@/utils/user';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { revalidatePath } from 'next/cache';
+import Skeleton from '../Sekeleton';
 
 const handleRemoveFromKeeps = async (id: string) => {
   'use server';
