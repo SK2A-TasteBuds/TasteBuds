@@ -103,54 +103,53 @@ export default function Main(request: any) {
   };
   return (
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      <div className="relative max-h-96 h-full max-w-md w-full  overflow-hidden flex justify-center mt-10">
-        {data
-          ?.slice()
-          .reverse()
-          .map((store, index) => (
-            <TinderCard
-              ref={childRefs[9 - index]}
-              key={9 - index}
-              onSwipe={(dir) => onSwiped(dir)}
-              onCardLeftScreen={() => nextStore(9 - index + 1)}
-              className={`absolute z-${-index} object-cover w-full `}
-            >
-              <Image
-                src={store.photo}
-                alt="store_img"
-                className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
-                width={320}
-                height={320}
-                priority
-              />
+      {data === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="relative max-h-96 h-full max-w-md w-full  overflow-hidden flex justify-center mt-10">
+          {data
+            ?.slice()
+            .reverse()
+            .map((store, index) => (
+              <TinderCard
+                ref={childRefs[9 - index]}
+                key={9 - index}
+                onSwipe={(dir) => onSwiped(dir)}
+                onCardLeftScreen={() => nextStore(9 - index + 1)}
+                className={`absolute z-${-index} object-cover w-full `}
+              >
+                <Image
+                  src={store.photo}
+                  alt="store_img"
+                  className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
+                  width={320}
+                  height={320}
+                  priority
+                />
 
-              <div className="py-4 max-w-md w-full">
-                <div className="flex justify-between ">
-                  <h3 className="text-xs">{store.genre.name}</h3>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-6 h-6 fill-orange-500"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <div className="py-4 max-w-md w-full">
+                  <div className="flex justify-between ">
+                    <h3 className="text-xs">{store.genre?.name}</h3>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6 fill-orange-500"
+                    >
+                      {/* SVG path here */}
+                    </svg>
+                  </div>
+                  <p className="mb-2 text-xl font-bold tracking-tight text-gray-900 ">
+                    {store.name}
+                  </p>
+                  <p className="mb-3 text-xs font-normal text-gray-700 ">
+                    {store.address}
+                  </p>
                 </div>
-                <p className="mb-2  text-xl font-bold tracking-tight text-gray-900 ">
-                  {store.name}
-                </p>
-
-                <p className="mb-3 text-xs font-normal text-gray-700 ">
-                  {store.address}
-                </p>
-              </div>
-            </TinderCard>
-          ))}
-      </div>
+              </TinderCard>
+            ))}
+        </div>
+      )}
 
       <div className="flex items-center justify-around p-2 max-w-md w-full ">
         <button
