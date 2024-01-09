@@ -2,144 +2,200 @@
 
 import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
-import SignOutBtn from '../components/SignOutBtn';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import thumbs_up from '@/assets/svg/thumbs-up.svg';
-import thumbs_down from '@/assets/svg/thumbs-down.svg';
+import { useEffect, useState, useMemo, createRef, useRef } from 'react';
 import { addToKeeps } from '@/utils/user';
-import Card from '@/app/components/cards/card'
+
+import { Store } from '@/types/types';
+import TinderCard from 'react-tinder-card';
+import React from 'react';
+import Image from 'next/image';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
-  console.log(session?.user);
   const genre = request.searchParams['genre_code'];
 
-  const [data, setData] = useState(null);
-  interface StoreState {
-    name: string;
-    img: string;
-    address: string;
-    id: string;
-  }
-  const [store, setStore] = useState<StoreState>({
-    name: 'ECCパフェ',
-    img: 'https://d1ralsognjng37.cloudfront.net/a834c4a6-4e71-4f58-8fb3-a37bd7be5559.jpeg',
-    address: '中崎町',
-    id: 'Store_id',
-  });
+  const [data, setData] = useState<Store[] | null>(null);
+  const [store, setStore] = useState<Store | null>(null);
 
-  //storeに入っているdataの要素番号
   const [showIndex, setIndex] = useState<number>(0);
-  const [start, setStart] = useState<number>(1);
+  const [start, setStart] = useState<number>(1); // for fetching
+
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
   if (genre) url += `&genre=${genre}`;
 
+  //locationかurlが変動した時の処理
   useEffect(() => {
-    if (location) {
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setData(data);
-          setStore({
-            name: data['data'][showIndex]['name'],
-            img: data['data'][showIndex]['photo'],
-            address: data['data'][showIndex]['address'],
-            id: data['data'][showIndex]['id'],
-          });
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [location, start]);
+    const fetchData = async () => {
+      try {
+        if (location) {
+          const response = await fetch(url);
+          const responseData = await response.json();
 
-  useEffect(() => {
-    const img = document.getElementById('store-img');
-    if (!img) return;
-    const test = () => {
-      nextStore(showIndex + 1);
+          setData(responseData['data']);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setData([]); // Set data to an empty array or handle the error accordingly
+      }
     };
-    img.addEventListener('click', test);
-    return () => {
-      img.removeEventListener('click', test);
-    };
-  }, [store.img]);
 
-  //usestateは非同期のためuseEffectでshowIndexの値が変化したのを検知してその時にstoreの値を変更している
+    fetchData();
+  }, [location, url]);
+
+  //showindexが変動した時の処理
   useEffect(() => {
     if (!data) return;
-    setStore({
-      name: data['data'][showIndex]['name'],
-      img: data['data'][showIndex]['photo'],
-      address: data['data'][showIndex]['address'],
-      id: data['data'][showIndex]['id'],
-    });
-    console.log('after', showIndex);
+    setStore(data[showIndex]);
   }, [showIndex]);
 
+  //test
+  useEffect(() => {
+    if (data) {
+      console.log(data[0]);
+    }
+  }, [data]);
+
+  //現在のdataに入っている次の店
   const nextStore = (i: number) => {
-    //dataがないときは処理しない
     if (!data) return;
-
-    console.log('before', showIndex);
     setIndex(i);
-    console.log(showIndex, 'datas', Object.keys(data['data']).length);
-
-    if (showIndex >= Object.keys(data['data']).length - 1) {
-      //データを初期化
+    if (showIndex >= data.length - 1) {
       setIndex(0);
       setData(null);
       setStart(start + 10);
     }
+    console.log('index', i);
   };
 
   const handleAddToKeeps = async () => {
-    console.log(session?.user.id);
-    console.log(store.id);
-    const user_id = session?.user.id;
-    const store_id = store.id;
-    addToKeeps(user_id, store_id);
+    if (session && store) {
+      console.log(session.user.id);
+      console.log(store.id);
+      const user_id = session.user.id;
+      const store_id = store.id;
+      addToKeeps(user_id, store_id);
+    }
   };
 
+  //react tinder card
+  const showIndexRef = useRef(showIndex);
+
+  const childRefs = useMemo<any>(
+    () =>
+      Array(data?.length)
+        .fill(0)
+        .map((i) => React.createRef()),
+    [data?.length]
+  );
+
+  const onSwipe = async (direction: string) => {
+    console.log('swiped ' + direction, showIndex);
+    if (direction === 'right') {
+      handleAddToKeeps();
+    }
+    await childRefs[showIndex].current.swipe(direction);
+  };
+
+  //タッチでスワイプされたとき
+  const onSwiped = (direction: string) => {
+    if (direction === 'right') {
+      handleAddToKeeps();
+    }
+  };
   return (
-    
     <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
-      {/* <SignOutBtn /> */}
-      <Card store={store}/>
+      {data === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="relative max-h-96 h-full max-w-md w-full  overflow-hidden flex justify-center mt-10">
+          {data
+            ?.slice()
+            .reverse()
+            .map((store, index) => (
+              <TinderCard
+                ref={childRefs[9 - index]}
+                key={9 - index}
+                onSwipe={(dir) => onSwiped(dir)}
+                onCardLeftScreen={() => nextStore(9 - index + 1)}
+                className={`absolute z-${-index} object-cover w-full `}
+              >
+                <Image
+                  src={store.photo}
+                  alt="store_img"
+                  className="h-64 w-full rounded-xl md:h-72 lg:h-80 "
+                  width={320}
+                  height={320}
+                  priority
+                />
 
-      <div className="good-bad w-full h-1/8 flex items-center mt-3 mx-auto">
-        <div className="bad rounded-full bg-transparent object-cover  justify-center items-center flex mx-auto">
-          <button
-            className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-blue-100"
-            onClick={() => nextStore(showIndex + 1)}
-          >
-            <Image
-              src={thumbs_down}
-              alt=""
-              className="bg-transparent object-cover w-full h-full m-auto"
-            />
-          </button>
+                <div className="py-4 max-w-md w-full">
+                  <div className="flex justify-between ">
+                    <h3 className="text-xs">{store.genre?.name}</h3>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6 fill-orange-500"
+                    >
+                      {/* SVG path here */}
+                    </svg>
+                  </div>
+                  <p className="mb-2 text-xl font-bold tracking-tight text-gray-900 ">
+                    {store.name}
+                  </p>
+                  <p className="mb-3 text-xs font-normal text-gray-700 ">
+                    {store.address}
+                  </p>
+                </div>
+              </TinderCard>
+            ))}
         </div>
+      )}
 
-        <div className="good rounded-full bg-transparent object-cover w-2/6 h-2/5 justify-center items-center flex">
-          <button
-            className="flex shadow-lg px-2 py-1  bg-transparent text-lg text-white font-semibold rounded-full bg-gradient-to-t from-transparent to-red-100"
-            onClick={() => {
-              nextStore(showIndex + 1);
-              handleAddToKeeps();
-            }}
+      <div className="flex items-center justify-around p-2 max-w-md w-full ">
+        <button
+          className="rounded-full"
+          onClick={() => {
+            onSwipe('left');
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-14 h-14 rounded-full bg-zinc-400 text-white"
           >
-            <Image
-              src={thumbs_up}
-              alt=""
-              className="bg-transparent object-cover w-full h-full m-auto"
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
             />
-          </button>
-        </div>
+          </svg>
+        </button>
+        <button
+          className="rounded-full"
+          onClick={() => {
+            onSwipe('right');
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-14 h-14 rounded-full bg-yellow-400 text-white p-1"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   );
