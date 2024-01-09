@@ -5,17 +5,20 @@ import { useSession } from 'next-auth/react';
 
 import { useEffect, useState, useRef } from 'react';
 import mapboxgl, { MapMouseEvent, Marker } from 'mapbox-gl';
+
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./svg.css"
 
 import { getUserKeepStore, getUserLikesStore } from '@/utils/stores';
 
-function Map() {
+type PageProps = {
+  params: { user_id: string };
+};
+function Map({ params }: PageProps) {
   // ユーザーがログインしている場合、データを取得してピンを追加
   const { data: session, status } = useSession();
-
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;
-
+  const {user_id} = params;
   const { location, error } = useGeolocation();
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -26,6 +29,7 @@ function Map() {
   const LocationColor = "#0000FF";
   const LikeListColor = "#fb923c";
   const KeepListColor = "#ffff00";
+
   useEffect(() => {
     // Get user's current lng lat
     if (!navigator.geolocation) {
@@ -65,14 +69,13 @@ function Map() {
   }, [location]); // Empty dependency array ensures this effect runs only once
 
 
-
   useEffect(() => {
-    if (session != null && map.current != null) {
+    if (user_id != null && map.current != null) {
       const getKeepList = async () => {
-        return await getUserKeepStore(session.user.id)
+        return await getUserKeepStore(user_id)
       }
       const getLikeList = async () => {
-        return await getUserLikesStore(session.user.id);
+        return await getUserLikesStore(user_id);
       }
       const KeepMarkers = getKeepList();
       KeepMarkers.then((data) => {
@@ -95,6 +98,7 @@ function Map() {
         });
       })
       const LikeMarkers = getLikeList();
+      
       LikeMarkers.then((data) => {
         data.forEach(element => {
           if (map.current != null) {
