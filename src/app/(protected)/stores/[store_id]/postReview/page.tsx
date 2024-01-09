@@ -79,6 +79,7 @@ export function Page({ params }: { params: { store_id: string } }) {
     <div className="flex min-h-full  flex-col justify-center items-start px-6 py-12 lg:px-8 ">
       <div className="text-center">{store_name}</div>
       <p className="inline-flex items-center mr-3 py-2 text-sm text-gray-900  font-semibold">
+        koko
         <Image
           width={120}
           height={120}
