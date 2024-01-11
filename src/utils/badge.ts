@@ -1,5 +1,12 @@
 import { db } from '@/firebase/configs';
-import { collection, query, where, getDocs, doc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getCountFromServer,
+} from 'firebase/firestore';
 
 //badge -Like/Bad%  投稿数 保存
 
@@ -28,4 +35,30 @@ export const getLikeRatio = async (store_id: string) => {
     console.error(`Error getting like ratio for Store ${store_id}:`, error);
     throw error;
   }
+};
+export const getReviewCount = async (store_id: string) => {
+  // Get the current date
+  const currentDate = new Date();
+
+  // Calculate the date 7 days ago
+  const sevenDaysAgo = new Date(currentDate);
+  sevenDaysAgo.setDate(currentDate.getDate() - 7);
+
+  const q = query(
+    collection(db, 'stores', store_id, 'reviews'),
+    where('created_at', '>=', sevenDaysAgo),
+    where('created_at', '<=', currentDate)
+  );
+
+  const snapshot = await getDocs(q);
+
+  // Sum the count of reviews within the last 7 days
+  let totalCount = 0;
+  snapshot.forEach((doc) => {
+    totalCount++;
+  });
+
+  console.log('count: ', totalCount);
+
+  return totalCount;
 };
