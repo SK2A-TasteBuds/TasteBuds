@@ -10,8 +10,7 @@ type PageProps = {
 
 export default function Page({ params }: PageProps) {
   const { store_id } = params;
-  getReviewCount(store_id);
-  getLikeRatio(store_id);
+
   return (
     <section className="overflow-y-scroll h-screen overscroll-none pb-20">
       <HeaderCard
