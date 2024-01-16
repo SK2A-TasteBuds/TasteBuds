@@ -6,6 +6,8 @@ import {
   doc,
   setDoc,
   DocumentData,
+  getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db, storage } from '@/firebase/configs';
 import { reviewData } from '@/types/types';
@@ -115,10 +117,27 @@ export const postReview = async (
 
     await setDoc(newReviewDocRef, reviewWithTimestamp);
 
+    // Update the review counter
+    await updateReviewCounter(store_id);
+
     console.log('Review added successfully:', newReviewDocRef.id);
     return newReviewDocRef.id;
   } catch (error) {
     console.error('Error adding review:', error);
     throw error;
+  }
+};
+
+const updateReviewCounter = async (store_id: string) => {
+  const counterRef = doc(db, 'stores', store_id);
+  const counterDoc = await getDoc(counterRef);
+
+  if (!counterDoc.exists()) {
+    // If counter document doesn't exist, create it with initial count 1
+    await setDoc(counterRef, { review_count: 1 });
+  } else {
+    // If counter document exists, update the count
+    const currentCount = counterDoc.data().count;
+    await updateDoc(counterRef, { review_count: currentCount + 1 });
   }
 };
