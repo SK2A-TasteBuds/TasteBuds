@@ -4,7 +4,7 @@ import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 
 import { useEffect, useState, useRef } from 'react';
-import mapboxgl, { MapMouseEvent, Marker } from 'mapbox-gl';
+import mapboxgl, { GeoJSONSource, MapMouseEvent, Marker } from 'mapbox-gl';
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./svg.css"
@@ -24,11 +24,13 @@ function Map({ params }: PageProps) {
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(15);
-  const [LoadedLocation, setLoadedLocation] = useState(false); //最初のlat lng取得した判定
-  const LocationColor = "#0000FF";
+  const [zoom, setZoom] = useState(4);
   const LikeListColor = "#fb923c";
   const KeepListColor = "#ffff00";
+  
+ 
+
+  
 
   useEffect(() => {
     // Get user's current lng lat
@@ -44,10 +46,12 @@ function Map({ params }: PageProps) {
               style: 'mapbox://styles/mapbox/light-v11',
               center: [longitude, latitude],
               zoom: zoom,
-            });
-            new mapboxgl.Marker({ color: LocationColor })
-              .setLngLat([longitude, latitude])
-              .addTo(map.current);
+            });            
+            
+            //現在地のピン(mapboxのcontrolに似たようなのがあったので削除)
+            // new mapboxgl.Marker({ color: LocationColor })
+            //   .setLngLat([longitude, latitude])
+            //   .addTo(map.current);
             //↓テスト用  
             map.current.on('move', () => {
               if (map.current == null) return;
@@ -55,11 +59,18 @@ function Map({ params }: PageProps) {
               setLat(Number(map.current.getCenter().lat.toFixed(4)));
               setZoom(Number(map.current.getZoom().toFixed(4)));
             })
+
+            map.current.addControl(
+              new mapboxgl.GeolocateControl({
+                positionOptions: {
+                  enableHighAccuracy: true
+                },
+                
+              })
+            );   
           }
           setLat(latitude);
           setLng(longitude);
-
-
         },
         (error) => {
           console.log('Error retrieving location:', error.message);
@@ -67,10 +78,10 @@ function Map({ params }: PageProps) {
       );
     }
   }, [location]); // Empty dependency array ensures this effect runs only once
-
+  
 
   useEffect(() => {
-    if (user_id != null && map.current != null) {
+    if (user_id != null && map.current != null ) {
       const getKeepList = async () => {
         return await getUserKeepStore(user_id)
       }
@@ -80,6 +91,7 @@ function Map({ params }: PageProps) {
       const KeepMarkers = getKeepList();
       KeepMarkers.then((data) => {
         data.forEach(element => {
+          console.log("Processing element:", element);  // デバッグログ
           if (map.current != null) {
             const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(`
