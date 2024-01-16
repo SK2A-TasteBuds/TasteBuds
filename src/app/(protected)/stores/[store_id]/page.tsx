@@ -9,6 +9,8 @@ import { addToKeeps } from '@/utils/user';
 import { useSession } from 'next-auth/react';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import Header from '@/app/components/HeaderBar';
+
 
 
 
@@ -31,8 +33,8 @@ export default async function Page({ params }: PageProps) {
   };
 
   return (
-
     <PageMotion>
+      <Header name="Store" />
       <section className="overflow-y-scroll h-screen overscroll-none pb-20">
         <HeaderCard
           data={fetch(`http://localhost:3000/api/stores/${store_id}`)}
