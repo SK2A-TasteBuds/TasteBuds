@@ -2,9 +2,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
+
 function BottomNav({ session }: { session: Session | null }) {
   const pathname = usePathname();
-
+  const { data: _session, status } = useSession();
+  const user_id = session?.user.id;
   return (
     <div className=" fixed z-50 w-full h-12 max-w-xs -translate-x-1/2 bottom-4 left-1/2  rounded-full border  ">
       <div className=" flex justify-center h-full max-w-sm  mx-auto  rounded-full shadow-xl ">
@@ -55,7 +58,7 @@ function BottomNav({ session }: { session: Session | null }) {
         </Link>
 
         <Link
-          href="/map"
+          href={`/map/${user_id}`}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
             pathname === '/map' ? 'border-orange-400' : 'border-none'
           } `}

@@ -4,10 +4,12 @@ import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState, useMemo, createRef, useRef } from 'react';
 import { addToKeeps } from '@/utils/user';
+
 import { Store } from '@/types/types';
 import TinderCard from 'react-tinder-card';
 import React from 'react';
 import Image from 'next/image';
+
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();

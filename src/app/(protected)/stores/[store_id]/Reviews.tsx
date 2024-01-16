@@ -9,13 +9,15 @@ function ReviewItem(props: any) {
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center ">
           <p className="inline-flex items-center mr-3 text-sm text-gray-900  font-semibold">
-            <Image
-              width={120}
-              height={120}
-              className="mr-2 w-6 h-6 rounded-full"
-              src={user_img}
-              alt={user_name}
-            />
+            <a href={`/map/${props.user_id}`}>
+              <Image
+                width={120}
+                height={120}
+                className="mr-2 w-6 h-6 rounded-full"
+                src={user_img}
+                alt={user_name}
+              />
+            </a>
             {user_name}
           </p>
           {/* like icons */}

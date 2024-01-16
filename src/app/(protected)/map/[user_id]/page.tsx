@@ -4,29 +4,34 @@ import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 
 import { useEffect, useState, useRef } from 'react';
-import mapboxgl, { MapMouseEvent, Marker } from 'mapbox-gl';
+import mapboxgl, { GeoJSONSource, MapMouseEvent, Marker } from 'mapbox-gl';
+
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./svg.css"
 
+import { getUserKeepStore, getUserLikesStore } from '@/utils/stores';
 
-import { getUserKeepStore,getUserReviewStore } from '@/utils/stores';
-
-function Map() {
+type PageProps = {
+  params: { user_id: string };
+};
+function Map({ params }: PageProps) {
   // ユーザーがログインしている場合、データを取得してピンを追加
   const { data: session, status } = useSession();
-
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;
-
+  const {user_id} = params;
   const { location, error } = useGeolocation();
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(15);
-  const [LoadedLocation, setLoadedLocation] = useState(false); //最初のlat lng取得した判定
-  const LocationColor = "#0000FF";
+  const [zoom, setZoom] = useState(4);
   const LikeListColor = "#fb923c";
   const KeepListColor = "#ffff00";
+  
+ 
+
+  
+
   useEffect(() => {
     // Get user's current lng lat
     if (!navigator.geolocation) {
@@ -41,10 +46,12 @@ function Map() {
               style: 'mapbox://styles/mapbox/light-v11',
               center: [longitude, latitude],
               zoom: zoom,
-            });
-            new mapboxgl.Marker({ color: LocationColor })
-              .setLngLat([longitude, latitude])
-              .addTo(map.current);
+            });            
+            
+            //現在地のピン(mapboxのcontrolに似たようなのがあったので削除)
+            // new mapboxgl.Marker({ color: LocationColor })
+            //   .setLngLat([longitude, latitude])
+            //   .addTo(map.current);
             //↓テスト用  
             map.current.on('move', () => {
               if (map.current == null) return;
@@ -52,11 +59,18 @@ function Map() {
               setLat(Number(map.current.getCenter().lat.toFixed(4)));
               setZoom(Number(map.current.getZoom().toFixed(4)));
             })
+
+            map.current.addControl(
+              new mapboxgl.GeolocateControl({
+                positionOptions: {
+                  enableHighAccuracy: true
+                },
+                
+              })
+            );   
           }
           setLat(latitude);
           setLng(longitude);
-
-
         },
         (error) => {
           console.log('Error retrieving location:', error.message);
@@ -64,20 +78,20 @@ function Map() {
       );
     }
   }, [location]); // Empty dependency array ensures this effect runs only once
-
-
+  
 
   useEffect(() => {
-    if (session != null && map.current != null) {
+    if (user_id != null && map.current != null ) {
       const getKeepList = async () => {
-        return await getUserKeepStore(session.user.id)
+        return await getUserKeepStore(user_id)
       }
-      const getLikeList = async () =>{
-        return await getUserReviewStore(session.user.id);
+      const getLikeList = async () => {
+        return await getUserLikesStore(user_id);
       }
       const KeepMarkers = getKeepList();
       KeepMarkers.then((data) => {
         data.forEach(element => {
+          console.log("Processing element:", element);  // デバッグログ
           if (map.current != null) {
             const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(`
@@ -96,7 +110,8 @@ function Map() {
         });
       })
       const LikeMarkers = getLikeList();
-      LikeMarkers.then((data)=>{
+      
+      LikeMarkers.then((data) => {
         data.forEach(element => {
           if (map.current != null) {
             const popup = new mapboxgl.Popup({ offset: 25 })
