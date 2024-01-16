@@ -5,11 +5,14 @@ import { useSession } from 'next-auth/react';
 
 import { useEffect, useState, useRef } from 'react';
 import mapboxgl, { GeoJSONSource, MapMouseEvent, Marker } from 'mapbox-gl';
+import Image from 'next/image';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './svg.css';
 
 import { getUserKeepStore, getUserLikesStore } from '@/utils/stores';
+import { getUser } from '@/utils/user';
+import { Qahiri } from 'next/font/google';
 
 type PageProps = {
   params: { user_id: string };
@@ -24,9 +27,29 @@ function Map({ params }: PageProps) {
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(10);
-  const LikeListColor = '#fb923c';
-  const KeepListColor = '#ffff00';
+
+  const [zoom, setZoom] = useState(4);
+  const LikeListColor = "#fb923c";
+  const KeepListColor = "#ffff00";
+  
+  //ユーザー情報取得
+  const [user_data,setUserData] = useState({name:"null",image:"null"});
+  const getUserParams = async ()=>{
+    return await getUser(user_id);
+  }
+  useEffect(()=>{
+    if(user_data.name == 'null'){
+      getUserParams().then((e)=>{
+        const name = e?.name;
+        const image = e?.image;
+        setUserData({name:name,image:image})
+      });
+      console.log(user_data)
+    }
+  },[user_data])
+ 
+
+
 
   useEffect(() => {
     // Get user's current lng lat
@@ -78,7 +101,10 @@ function Map({ params }: PageProps) {
     if (user_id != null && map.current != null) {
       const getKeepList = async () => {
         return await getUserKeepStore(user_id);
+
+      }
       };
+
       const getLikeList = async () => {
         return await getUserLikesStore(user_id);
       };
@@ -126,9 +152,9 @@ function Map({ params }: PageProps) {
   }, [map.current]);
   return (
     <div className="h-screen">
-      {/*↓テスト用 */}
-      <div>
-        lat:{lat}lang:{lng}zoom:{zoom}
+      <div className='flex'>
+        <img src={`${user_data.image}`} alt={`${user_data.name}`} width={120} height={120} className="mr-2 w-6 h-6 rounded-full"/>
+        {user_data.name}
       </div>
 
       <div ref={mapContainer} className=" object-cover h-full"></div>
