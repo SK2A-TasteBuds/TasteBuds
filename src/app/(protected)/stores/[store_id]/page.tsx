@@ -2,6 +2,7 @@ import HeaderCard from './HeaderCard';
 import Reviews from './Reviews';
 import ReviewGrid from './ReviewGrid';
 import Link from 'next/link';
+import { getReviewCount, getLikeRatio } from '@/utils/badge';
 
 import PageMotion from '@/app/components/PageMotion';
 
@@ -22,6 +23,7 @@ export default async function Page({ params }: PageProps) {
 
   const session: Session | null = await getServerSession(authOptions);
   const { store_id } = params;
+
 
   const handleAddToKeeps = async () => {
     'use server';
@@ -44,6 +46,5 @@ export default async function Page({ params }: PageProps) {
         <Reviews store_id={store_id} />
       </section>
     </PageMotion>
-
   );
 }
