@@ -6,10 +6,6 @@ import PageMotion from '@/app/components/PageMotion';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Header from '@/app/components/HeaderBar';
-
-
-
-
 import { getReviewCount, getLikeRatio } from '@/utils/badge';
 
 type PageProps = {
