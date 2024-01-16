@@ -9,6 +9,9 @@ import { Store } from '@/types/types';
 import TinderCard from 'react-tinder-card';
 import React from 'react';
 import Image from 'next/image';
+import MainSkeleton from '../components/MainSkeleton';
+import Header from '../components/HeaderBar';
+import MainFilter from '../components/MainFilter';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
@@ -104,11 +107,17 @@ export default function Main(request: any) {
     }
   };
   return (
-    <div className="main flex flex-col overflow-hidden items-center w-full h-screen">
+    <div className="flex flex-col overflow-hidden items-center w-full h-screen">
+      <Header name="Home" />
+      <MainFilter />
+
       {data === null ? (
-        <p>Loading...</p>
+        <MainSkeleton />
       ) : (
-        <div className="relative max-h-96 h-full max-w-md w-full  overflow-hidden flex justify-center mt-10">
+        <div
+          style={{ height: '420px' }}
+          className="relative max-w-md w-full overflow-hidden flex justify-center mt-5"
+        >
           {data
             ?.slice()
             .reverse()
@@ -153,7 +162,7 @@ export default function Main(request: any) {
         </div>
       )}
 
-      <div className="flex items-center justify-around p-2 max-w-md w-full ">
+      <div className="flex items-center justify-around max-w-md w-full ">
         <button
           className="rounded-full"
           onClick={() => {
