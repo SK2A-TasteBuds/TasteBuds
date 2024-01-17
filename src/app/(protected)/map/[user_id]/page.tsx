@@ -23,7 +23,7 @@ function Map({ params }: PageProps) {
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
 
-  const [zoom, setZoom] = useState(4);
+  const [zoom, setZoom] = useState(15);
   const LikeListColor = '#fb923c';
   const KeepListColor = '#ffff00';
 
