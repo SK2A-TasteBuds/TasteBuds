@@ -46,10 +46,29 @@ function MainFilter() {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-md" onClick={stopPropagation}>
-            {/* Your modal content goes here */}
-            <p>This is the popup content.</p>
-            <button onClick={closeModal}>Close</button>
+          <div
+            className="bg-white p-8 rounded-md relative"
+            onClick={stopPropagation}
+          >
+            <button
+              onClick={closeModal}
+              className="absolute top-0 right-0 p-4 cursor-pointer"
+            >
+              X
+            </button>
+            <div className="flex flex-col">
+              <label for="name" className="text-stone-600 text-sm font-medium">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                placeholder="raspberry juice"
+                className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+              <div>slider 1</div>
+              <div>slider 2</div>
+            </div>
           </div>
         </div>
       )}
