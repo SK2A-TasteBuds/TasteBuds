@@ -24,17 +24,20 @@ export default function Home() {
 
   return (
     <>
-      <Header name="Search" />
-      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
-          {foodItems.map((item: any, index) => (
-            <FoodCard
-              key={index}
-              name={item.name}
-              imgUrl={item.imgUrl}
-              genre_code={item.genre_code}
-            />
-          ))}
+      <div className="  flex flex-col items-center justify-center">
+        <Header name="Search" />
+
+        <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
+            {foodItems.map((item: any, index) => (
+              <FoodCard
+                key={index}
+                name={item.name}
+                imgUrl={item.imgUrl}
+                genre_code={item.genre_code}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>
