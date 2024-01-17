@@ -99,7 +99,7 @@ function MainFilter() {
                   max="5"
                   step="1"
                 />
-                <div className="flex justify-between">
+                <div className="flex justify-between mb-2">
                   <label
                     key="1"
                     htmlFor={`customRange1_step_${1}`}
@@ -148,7 +148,7 @@ function MainFilter() {
               </label>
               <input
                 type="range"
-                className="transparent h-[4px]  w-full cursor-pointer appearance-none border-transparent bg-neutral-200 "
+                className="transparent h-[4px] mb-2  w-full cursor-pointer appearance-none border-transparent bg-neutral-200 "
                 id="customRange2"
               />
             </div>
