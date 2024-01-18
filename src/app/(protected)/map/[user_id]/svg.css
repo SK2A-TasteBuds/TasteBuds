@@ -8,3 +8,26 @@
 .mapboxgl-ctrl-top-right{
     background-color: transparent;
 }
+
+.mapboxgl-ctrl-bottom-left{
+    background-color: transparent;
+}
+.mapboxgl-ctrl-bottom-right{
+    background-color: transparent;
+}
+.mapboxgl-ctrl-icon{
+    background-color: transparent;
+}
+
+.icon-name * {
+    background-color: transparent;
+}
+
+.marker {
+    background-image: url('https://www.svgrepo.com/show/311806/blue-circle.svg');
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
