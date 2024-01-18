@@ -16,6 +16,9 @@ export default function Main(request: any) {
   const { location, error } = useGeolocation();
   const { data: session, status } = useSession();
   const genre = request.searchParams['genre_code'];
+  const budget = request.searchParams['budget'];
+  const keyword = request.searchParams['keyword'];
+  const range = request.searchParams['range'];
 
   const [data, setData] = useState<Store[] | null>(null);
   const [store, setStore] = useState<Store | null>(null);
@@ -25,6 +28,11 @@ export default function Main(request: any) {
 
   let url = `/api/stores?lat=${location?.lat}&lng=${location?.lng}&start=${start}`;
   if (genre) url += `&genre=${genre}`;
+  if (budget) url += `&budget=${budget}`;
+  if (keyword) url += `&keyword=${keyword}`;
+  if (range) url += `&range=${range}`;
+
+  console.log(url);
 
   //locationかurlが変動した時の処理
   useEffect(() => {
@@ -34,7 +42,11 @@ export default function Main(request: any) {
           const response = await fetch(url);
           const responseData = await response.json();
 
-          setData(responseData['data']);
+          if (responseData['data'] && responseData['data'].length > 0) {
+            setData(responseData['data']);
+          } else {
+            setData([]); // Set data to an empty array
+          }
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -53,6 +65,7 @@ export default function Main(request: any) {
 
   //test
   useEffect(() => {
+    console.log('data', data);
     if (data) {
       console.log(data[0]);
     }
@@ -161,7 +174,7 @@ export default function Main(request: any) {
         </div>
       )}
 
-      <div className="flex items-center justify-around max-w-md w-full  ">
+      <div className="flex items-center justify-around max-w-md w-full  pt-2">
         <button
           className="rounded-full"
           onClick={() => {
