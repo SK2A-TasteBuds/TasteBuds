@@ -1,17 +1,17 @@
-"use client";
-import Image from "next/image";
-import googleIcon from "@/assets/svg/googleIcon.svg";
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signUp } from "@/firebase/register";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase/configs";
+'use client';
+import Image from 'next/image';
+import googleIcon from '@/assets/svg/googleIcon.svg';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signUp } from '@/firebase/register';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebase/configs';
 
 const Register = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
@@ -20,7 +20,7 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError("Validation Error : password Do not Match");
+      setError('Validation Error : password Do not Match');
       return;
     }
 
@@ -35,7 +35,7 @@ const Register = () => {
           }
         );
         //redirect
-        router.push("/getting-started");
+        router.push('/');
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -119,16 +119,16 @@ const Register = () => {
                   onClick={(
                     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
                   ) => handleSignUp(e)}
-                  className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                  className="w-full text-white bg-orange-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 >
                   Create an account
                 </button>
                 <p className="text-xs text-red-500">{error}</p>
                 <p className="text-sm font-light text-gray-500 ">
-                  Already have an account?{" "}
+                  Already have an account?{' '}
                   <Link
                     href="/login"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500 text-orange-500"
                   >
                     Login here
                   </Link>

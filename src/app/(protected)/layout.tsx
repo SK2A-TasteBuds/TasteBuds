@@ -21,7 +21,6 @@ export default async function MainLayout(props: {
          
         </>
       )} */}
-      <SignOutBtn />
       {props.children}
       {props.modal}
 

@@ -1,5 +1,6 @@
 import { Session } from 'next-auth';
 import Image from 'next/image';
+import SignOutBtn from '@/app/components/SignOutBtn';
 
 function Header({ session }: { session: Session | null }) {
   const user = session?.user;
@@ -27,6 +28,7 @@ function Header({ session }: { session: Session | null }) {
               {user.name}
             </h2>
           </div>
+          <SignOutBtn />
         </div>
       </div>
     </div>

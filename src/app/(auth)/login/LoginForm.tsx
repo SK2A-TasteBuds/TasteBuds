@@ -1,26 +1,26 @@
-"use client";
-import { signIn } from "next-auth/react";
-import type { SignInResponse } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { GoogleLoginBtn } from "@/app/components/GoogleLoginBtn";
+'use client';
+import { signIn } from 'next-auth/react';
+import type { SignInResponse } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { GoogleLoginBtn } from '@/app/components/GoogleLoginBtn';
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
   const handleSignIn = async () => {
-    const result: SignInResponse | undefined = await signIn("credentials", {
+    const result: SignInResponse | undefined = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
-   
-    if (result && "status" in result && result.status === 200 && result.ok) {
-      router.push("/");
+
+    if (result && 'status' in result && result.status === 200 && result.ok) {
+      router.push('/');
     } else {
-      console.log("error : ", result);
+      console.log('error : ', result);
     }
   };
 
@@ -58,8 +58,8 @@ export const LoginForm = () => {
             </label>
             <div className="text-sm">
               <div
-                onClick={() => console.log("forgot-password")}
-                className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300"
+                onClick={() => console.log('forgot-password')}
+                className="cursor-pointer font-semibold text-orange-400 hover:text-orange-300"
               >
                 Forgot password?
               </div>
@@ -84,7 +84,7 @@ export const LoginForm = () => {
           <button
             onClick={() => handleSignIn()}
             disabled={!email || !password}
-            className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 "
+            className="disabled:opacity-40 flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 "
           >
             Login
           </button>
@@ -99,10 +99,10 @@ export const LoginForm = () => {
         <GoogleLoginBtn />
       </div>
       <p className="mt-10 text-center text-sm text-gray-400">
-        Not a member?{" "}
+        Not a member?{' '}
         <button
-          onClick={() => router.push("register")}
-          className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
+          onClick={() => router.push('register')}
+          className="font-semibold leading-6 text-orange-400 hover:text-orange-300"
         >
           Register
         </button>
