@@ -150,6 +150,7 @@ export default function Home() {
 
   return (
     <>
+
       <Header name="Search" />
       {/* 特集ページ */}
 
@@ -224,6 +225,7 @@ export default function Home() {
               genre_code={item.genre_code}
             />
           ))}
+
         </div>
       </div>
     </>

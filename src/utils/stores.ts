@@ -31,7 +31,7 @@ export const getUserKeepStore = async (user_id: string) => {
           `http://localhost:3000/api/stores/${item}`
         );
         const store = await response.json();
-        console.log(store);
+        //console.log(store);
         return store;
       });
 

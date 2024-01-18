@@ -10,8 +10,8 @@ function Header({ name }: { name: string }) {
   };
 
   return (
-    <div className="flex justify-center items-center py-2 ">
-      <button className="absolute left-2" onClick={goBack}>
+    <div className="flex justify-center items-center py-2 max-w-md w-full ">
+      <button onClick={goBack}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
