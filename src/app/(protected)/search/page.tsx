@@ -298,15 +298,8 @@ export default function Home() {
       )}
 
       {/* フォーム追加 */}
-      <form action="" className="ml-2 mt-1 mb-1">
-        <input
-          type="text"
-          className="border-2 border-black"
-          placeholder="エリア検索"
-        />
-      </form>
 
-      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
+      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 mt-2">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
           {foodItems.map((item: any, index) => (
             <FoodCard
