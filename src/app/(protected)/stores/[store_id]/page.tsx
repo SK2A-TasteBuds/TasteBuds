@@ -7,6 +7,7 @@ import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Header from '@/app/components/HeaderBar';
 import { getReviewCount, getLikeRatio } from '@/utils/badge';
+import { redirect } from 'next/navigation';
 
 type PageProps = {
   params: { store_id: string };
@@ -17,6 +18,9 @@ export default async function Page({ params }: PageProps) {
   const { store_id } = params;
   const reviewCount = await getReviewCount(store_id);
   const ratio = await getLikeRatio(store_id);
+  if (!session) {
+    redirect('/signin?callbackUrl=/(protected)/');
+  }
 
   return (
     <PageMotion>

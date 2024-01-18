@@ -4,21 +4,28 @@ import { useGeolocation } from '@/contexts/GeolocationProvider';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState, useMemo, createRef, useRef } from 'react';
 import { addToKeeps } from '@/utils/user';
-import { Store } from '@/types/types';
 import TinderCard from 'react-tinder-card';
 import React from 'react';
 import Image from 'next/image';
 import MainSkeleton from '../components/MainSkeleton';
 import Header from '../components/HeaderBar';
 import MainFilter from '../components/MainFilter';
+import { redirect } from 'next/navigation';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin?callbackUrl=/(protected)/');
+    },
+  });
   const genre = request.searchParams['genre_code'];
   const budget = request.searchParams['budget'];
   const keyword = request.searchParams['keyword'];
   const range = request.searchParams['range'];
+
+  console.log(session);
 
   const [data, setData] = useState<any[] | null>(null);
   const [store, setStore] = useState<any | null>(null);

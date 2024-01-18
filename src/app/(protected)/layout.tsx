@@ -18,10 +18,10 @@ export default async function MainLayout(props: {
           <p className="text-xs">{user.name}</p>
           <p className="text-xs">{user.email}</p>
           <p className="text-xs overflow-scroll">{user.image}</p>
-          <SignOutBtn />
+         
         </>
       )} */}
-
+      <SignOutBtn />
       {props.children}
       {props.modal}
 

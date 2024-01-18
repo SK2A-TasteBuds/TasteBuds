@@ -8,13 +8,19 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './svg.css';
 import { getUserKeepStore, getUserLikesStore } from '@/utils/stores';
 import { getUser } from '@/utils/user';
+import { redirect } from 'next/navigation';
 
 type PageProps = {
   params: { user_id: string };
 };
 function Map({ params }: PageProps) {
   // ユーザーがログインしている場合、データを取得してピンを追加
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin?callbackUrl=/(protected)/');
+    },
+  });
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;
   const { user_id } = params;
   const { location, error } = useGeolocation();
@@ -58,13 +64,13 @@ function Map({ params }: PageProps) {
               center: [longitude, latitude],
               zoom: zoom,
             });
-            setLat(latitude)
-            setLng(longitude)
+            setLat(latitude);
+            setLng(longitude);
             //現在地のピン(mapboxのcontrolに似たようなのがあったので削除)
             // new mapboxgl.Marker({ color: LocationColor })
             //   .setLngLat([longitude, latitude])
             //   .addTo(map.current);
-            
+
             //↓テスト用
             // map.current.on('move', () => {
             //   if (map.current == null) return;
@@ -72,7 +78,7 @@ function Map({ params }: PageProps) {
             //   setLat(Number(map.current.getCenter().lat.toFixed(4)));
             //   setZoom(Number(map.current.getZoom().toFixed(4)));
             // });
-            
+
             //ズーム機能(ズームするとポップアップが正常に動かないため削除)
             // map.current.addControl(
             //   new mapboxgl.GeolocateControl({
@@ -82,7 +88,6 @@ function Map({ params }: PageProps) {
             //   })
             // );
           }
-          
         },
         (error) => {
           console.log('Error retrieving location:', error.message);
@@ -146,13 +151,13 @@ function Map({ params }: PageProps) {
 
     fetchData();
   }, [map.current, user_id]);
-  const setZoomatButton = ()=>{
-    console.log("clicked")
+  const setZoomatButton = () => {
+    console.log('clicked');
     map.current?.flyTo({
-      center:[lng, lat],
-      zoom:12
-    })
-  }
+      center: [lng, lat],
+      zoom: 12,
+    });
+  };
   return (
     <div className="h-screen">
       <div className="flex">
@@ -167,9 +172,14 @@ function Map({ params }: PageProps) {
       </div>
 
       <div ref={mapContainer} className=" object-cover h-full">
-        <div className='mapboxgl-ctrl-top-right'>
-          <div className='mapboxgl-ctrl mapboxgl-ctrl-group'>
-            <button className="mapboxgl-ctrl-geolocate" onClick={()=>setZoomatButton()}>+</button>
+        <div className="mapboxgl-ctrl-top-right">
+          <div className="mapboxgl-ctrl mapboxgl-ctrl-group">
+            <button
+              className="mapboxgl-ctrl-geolocate"
+              onClick={() => setZoomatButton()}
+            >
+              +
+            </button>
           </div>
         </div>
       </div>

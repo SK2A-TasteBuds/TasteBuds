@@ -5,12 +5,18 @@ import Image from 'next/image';
 import { postReview } from '@/utils/reviews';
 import { addToLikes, removeFromKeeps } from '@/utils/user';
 import { reviewData } from '@/types/types';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 
 function Home({ params }: { params: { store_id: string } }) {
   const router = useRouter();
   const { store_id } = params;
-  const { data } = useSession();
+  const { data } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin?callbackUrl=/(protected)/');
+    },
+  });
+
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a file input ref
 
   const [reviewContent, setReviewContent] = useState<string>('');

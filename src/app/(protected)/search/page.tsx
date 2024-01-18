@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
 import Header from '@/app/components/HeaderBar';
-import Main from '../page';
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import SushiSvg from '@/assets/svg/sushi.svg';
 import FruitSandwichSvg from '@/assets/svg/fruit-sandwich.svg';
@@ -11,7 +12,12 @@ import Link from 'next/link';
 export default function Home() {
   // 食品ジャンルのデータを格納するための状態
   const [foodItems, setItems] = useState([]);
-
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin?callbackUrl=/(protected)/');
+    },
+  });
   useEffect(() => {
     // APIからデータを非同期で取得する関数
     async function fetchData() {
