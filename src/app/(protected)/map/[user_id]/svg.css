@@ -4,3 +4,7 @@
 .mapboxgl-marker{
     background-color: transparent;
 }
+
+.mapboxgl-ctrl-top-right{
+    background-color: transparent;
+}
