@@ -20,8 +20,8 @@ export default function Main(request: any) {
   const keyword = request.searchParams['keyword'];
   const range = request.searchParams['range'];
 
-  const [data, setData] = useState<Store[] | null>(null);
-  const [store, setStore] = useState<Store | null>(null);
+  const [data, setData] = useState<any[] | null>(null);
+  const [store, setStore] = useState<any | null>(null);
 
   const [showIndex, setIndex] = useState<number>(0);
   const [start, setStart] = useState<number>(1); // for fetching
