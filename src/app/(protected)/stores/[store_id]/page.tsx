@@ -19,7 +19,7 @@ export default async function Page({ params }: PageProps) {
   const reviewCount = await getReviewCount(store_id);
   const ratio = await getLikeRatio(store_id);
   if (!session) {
-    redirect('/signin?callbackUrl=/(protected)/');
+    redirect('/login');
   }
 
   return (

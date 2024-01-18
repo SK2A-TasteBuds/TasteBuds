@@ -1,9 +1,13 @@
 import { Session } from 'next-auth';
 import Image from 'next/image';
 import SignOutBtn from '@/app/components/SignOutBtn';
+import { getUser } from '@/utils/user';
 
-function Header({ session }: { session: Session | null }) {
+async function Header({ session }: { session: Session | null }) {
   const user = session?.user;
+  const userinfo = await getUser(user.id);
+  const userName = userinfo?.name;
+  const userImage = userinfo?.image;
 
   return (
     <div className=" sticky top-0 z-20">
@@ -15,7 +19,7 @@ function Header({ session }: { session: Session | null }) {
             height={100}
             className="w-20 h-20 object-cover rounded-full
                    border-2 "
-            src={session?.user.image}
+            src={userImage}
             referrerPolicy="no-referrer"
             alt="profile"
           />
@@ -25,7 +29,7 @@ function Header({ session }: { session: Session | null }) {
         <div className="w-8/12 md:w-7/12 ml-4">
           <div className="md:flex md:flex-wrap md:items-center mb-4">
             <h2 className="text-3xl inline-block font-light md:mr-2 mb-2 sm:mb-0">
-              {user.name}
+              {userName}
             </h2>
           </div>
           <SignOutBtn />

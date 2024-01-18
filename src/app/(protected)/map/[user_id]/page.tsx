@@ -18,7 +18,7 @@ function Map({ params }: PageProps) {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin?callbackUrl=/(protected)/');
+      redirect('/login');
     },
   });
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAP_BOX_TOKEN as string;

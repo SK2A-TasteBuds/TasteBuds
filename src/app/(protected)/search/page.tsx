@@ -15,7 +15,7 @@ export default function Home() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin?callbackUrl=/(protected)/');
+      redirect('/login');
     },
   });
   useEffect(() => {

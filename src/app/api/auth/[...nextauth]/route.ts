@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthOptions, Profile } from 'next-auth';
-import { redirect } from 'next/navigation';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import {
@@ -105,14 +104,14 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.sub;
       session.user.isNewUser = token.isNewUser;
 
-      //console.log("session callback:", token);
+      // console.log('session callback:', token);
       return session;
     },
     async jwt({ token, account, user }) {
       if (user) {
-        token.isNewUser = user.isNewUser;
+        // token.isNewUser = user.isNewUser;
         token.id = user.id;
-        //console.log("jwt callback :", token);
+        console.log('jwt callback :', user);
       }
       return token;
     },

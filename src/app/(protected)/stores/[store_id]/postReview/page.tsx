@@ -13,7 +13,7 @@ function Home({ params }: { params: { store_id: string } }) {
   const { data } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin?callbackUrl=/(protected)/');
+      redirect('/login');
     },
   });
 

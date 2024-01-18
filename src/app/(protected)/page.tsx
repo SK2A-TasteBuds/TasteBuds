@@ -17,7 +17,7 @@ export default function Main(request: any) {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin?callbackUrl=/(protected)/');
+      redirect('/login');
     },
   });
   const genre = request.searchParams['genre_code'];
