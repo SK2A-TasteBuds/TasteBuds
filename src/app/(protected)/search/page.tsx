@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     // APIからデータを非同期で取得する関数
     async function fetchData() {
-      const res = await fetch('http://localhost:3000/api/genre');
+      const res = await fetch('/api/genre');
       const data = await res.json();
       console.log(data);
       setItems(data);
