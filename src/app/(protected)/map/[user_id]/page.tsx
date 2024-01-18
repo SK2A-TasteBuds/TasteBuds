@@ -23,7 +23,7 @@ function Map({ params }: PageProps) {
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
 
-  const [zoom, setZoom] = useState(15);
+  const [zoom, setZoom] = useState(6);
   const LikeListColor = '#fb923c';
   const KeepListColor = '#ffff00';
 
@@ -60,6 +60,8 @@ function Map({ params }: PageProps) {
             });
             setLat(latitude)
             setLng(longitude)
+
+            
             //現在地のピン(mapboxのcontrolに似たようなのがあったので削除)
             // new mapboxgl.Marker({ color: LocationColor })
             //   .setLngLat([longitude, latitude])
@@ -90,6 +92,12 @@ function Map({ params }: PageProps) {
       );
     }
   }, [location]); // Empty dependency array ensures this effect runs only once
+  useEffect(()=>{
+    //ユーザーの位置表示
+    const el = document.createElement('div');
+    el.className = 'marker';
+    if(map.current)new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(map.current);
+  },[lng,lat])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,27 +154,36 @@ function Map({ params }: PageProps) {
 
     fetchData();
   }, [map.current, user_id]);
+  const [flyed,setFlyed] = useState(false);
   const setZoomatButton = ()=>{
-    console.log("clicked")
-    map.current?.flyTo({
-      center:[lng, lat],
-      zoom:12
-    })
+    if(!flyed){
+      map.current?.flyTo({
+        center:[lng, lat],
+        zoom:12
+      })
+      setFlyed(true);
+    }else{
+      map.current?.flyTo({
+        center:[lng, lat],
+        zoom:6
+      })
+      setFlyed(false);
+    }
+    
   }
   return (
     <div className="h-screen">
-      <div className="flex">
-        <img
-          src={`${user_data.image}`}
-          alt={`${user_data.name}`}
-          width={120}
-          height={120}
-          className="mr-2 w-6 h-6 rounded-full"
-        />
-        {user_data.name}
-      </div>
-
       <div ref={mapContainer} className=" object-cover h-full">
+        <div className="icon-name absolute top-3 left-1 z-[2] bg-transparent flex ">
+            <img
+              src={`${user_data.image}`}
+              alt={`${user_data.name}`}
+              width={120}
+              height={120}
+              className="mr-2 w-6 h-6 rounded-full bg-transparent"
+            />
+            {user_data.name}
+        </div>
         <div className='mapboxgl-ctrl-top-right'>
           <div className='mapboxgl-ctrl mapboxgl-ctrl-group'>
             <button className="mapboxgl-ctrl-geolocate" onClick={()=>setZoomatButton()}>+</button>
