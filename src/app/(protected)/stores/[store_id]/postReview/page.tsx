@@ -7,7 +7,7 @@ import { addToLikes, removeFromKeeps } from '@/utils/user';
 import { reviewData } from '@/types/types';
 import { useRouter } from 'next/navigation';
 
-export function Home({ params }: { params: { store_id: string } }) {
+function Home({ params }: { params: { store_id: string } }) {
   const router = useRouter();
   const { store_id } = params;
   const { data } = useSession();
