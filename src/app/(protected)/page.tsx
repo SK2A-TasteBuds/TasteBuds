@@ -11,6 +11,7 @@ import MainSkeleton from '../components/MainSkeleton';
 import Header from '../components/HeaderBar';
 import MainFilter from '../components/MainFilter';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export default function Main(request: any) {
   const { location, error } = useGeolocation();
@@ -97,6 +98,7 @@ export default function Main(request: any) {
       const user_id = session.user.id;
       const store_id = store.id;
       addToKeeps(user_id, store_id);
+      // revalidatePath('/users/${user_}')
     }
   };
 

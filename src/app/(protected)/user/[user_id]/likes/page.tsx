@@ -15,7 +15,6 @@ async function page() {
     <>
       <h1>Likes page</h1>
       <List items={data} />
-      <SignOutBtn />
     </>
   );
 }

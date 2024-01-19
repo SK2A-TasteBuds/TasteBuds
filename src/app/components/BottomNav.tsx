@@ -10,11 +10,16 @@ function BottomNav({ session }: { session: Session | null }) {
   const router = useRouter();
   const { data: _session, status } = useSession();
   const user_id = session?.user.id;
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <div className=" fixed z-50 w-full h-12 max-w-xs -translate-x-1/2 bottom-4 left-1/2  rounded-full border ">
       <div className=" flex justify-center h-full max-w-sm  mx-auto  rounded-full shadow-xl ">
-        <Link
-          href="/"
+        <button
+          onClick={() => handleNavigation('/')}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
             pathname === '/' ? 'border-orange-400' : 'border-none'
           } `}
@@ -31,10 +36,10 @@ function BottomNav({ session }: { session: Session | null }) {
             <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
             <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
           </svg>
-        </Link>
+        </button>
 
-        <Link
-          href="/search"
+        <button
+          onClick={() => handleNavigation('/search')}
           type="button"
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
             pathname === '/search' ? 'border-orange-400' : 'border-none'
@@ -57,10 +62,10 @@ function BottomNav({ session }: { session: Session | null }) {
               d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
             />
           </svg>
-        </Link>
+        </button>
 
-        <Link
-          href={`/map/${user_id}`}
+        <button
+          onClick={() => handleNavigation(`/map/${user_id}`)}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
             pathname === `/map/${user_id}` ? 'border-orange-400' : 'border-none'
           } `}
@@ -82,10 +87,10 @@ function BottomNav({ session }: { session: Session | null }) {
               clipRule="evenodd"
             />
           </svg>
-        </Link>
+        </button>
 
-        <Link
-          href={`/user/${session?.user.name}/keeps`}
+        <button
+          onClick={() => handleNavigation(`/user/${session?.user.name}/keeps`)}
           className={`inline-flex flex-col items-center justify-center px-5 group border-b-4 ${
             pathname === `/user/${session?.user.name}/keeps` ||
             pathname === `/user/${session?.user.name}/likes`
@@ -111,7 +116,7 @@ function BottomNav({ session }: { session: Session | null }) {
               clipRule="evenodd"
             />
           </svg>
-        </Link>
+        </button>
       </div>
     </div>
   );
